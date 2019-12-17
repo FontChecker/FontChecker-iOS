@@ -1,0 +1,6 @@
+framework module Pods_FontChecker_FontCheckerUITests {
+  umbrella header "Pods-FontChecker-FontCheckerUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}

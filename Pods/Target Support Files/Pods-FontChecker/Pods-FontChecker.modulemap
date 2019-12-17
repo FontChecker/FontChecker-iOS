@@ -1,0 +1,6 @@
+framework module Pods_FontChecker {
+  umbrella header "Pods-FontChecker-umbrella.h"
+
+  export *
+  module * { export * }
+}

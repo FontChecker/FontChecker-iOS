@@ -1,0 +1,44 @@
+PODS:
+  - RxCocoa (5.0.1):
+    - RxRelay (~> 5)
+    - RxSwift (~> 5)
+  - RxOptional (4.1.0):
+    - RxCocoa (~> 5)
+    - RxSwift (~> 5)
+  - RxRelay (5.0.1):
+    - RxSwift (~> 5)
+  - RxSwift (5.0.1)
+  - SnapKit (5.0.1)
+  - Then (2.6.0)
+  - Toaster (2.2.0)
+
+DEPENDENCIES:
+  - RxCocoa (~> 5)
+  - RxOptional (~> 4.1.0)
+  - RxSwift (~> 5)
+  - SnapKit (~> 5.0.1)
+  - Then (~> 2.6.0)
+  - Toaster (~> 2.2.0)
+
+SPEC REPOS:
+  trunk:
+    - RxCocoa
+    - RxOptional
+    - RxRelay
+    - RxSwift
+    - SnapKit
+    - Then
+    - Toaster
+
+SPEC CHECKSUMS:
+  RxCocoa: e741b9749968e8a143e2b787f1dfbff2b63d0a5c
+  RxOptional: b1fcd60856807a564c0215c2184b8d33e7826dc2
+  RxRelay: 89d54507f4fd4d969e6ec1d4bd7f3673640b4640
+  RxSwift: e2dc62b366a3adf6a0be44ba9f405efd4c94e0c4
+  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+  Then: 90cd104fd951cec1980a03f57704ad8f784d4d79
+  Toaster: c1a81b376edcc2470157b4d1ee1e9341d3b96455
+
+PODFILE CHECKSUM: 545ac922f73f6dd788e9dbd2180a285548233ad9
+
+COCOAPODS: 1.8.4
