@@ -7,15 +7,21 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 import Then
 import SnapKit
 
 class ViewController: UIViewController {
+    let disposeBag = DisposeBag()
+
     let fontButton = UIButton()
     let bgColorButton = UIButton()
     let textColorButton = UIButton()
     let sizeButton = UIButton()
     let textView = UITextView()
+
+    let settingView = UIScrollView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,9 +29,19 @@ class ViewController: UIViewController {
         layout()
     }
 
+    func bind() {
+    }
+
     func attribute() {
         view.backgroundColor = .white
         navigationController?.navigationBar.topItem?.title = "Font Checker"
+
+        settingView.do {
+            $0.backgroundColor = .red
+            $0.bounces = false
+            $0.showsHorizontalScrollIndicator = false
+            $0.isHidden = true
+        }
 
         fontButton.do {
             $0.setTitle("폰트변경", for: .normal)
@@ -67,6 +83,13 @@ class ViewController: UIViewController {
         view.addSubview(textColorButton)
         view.addSubview(sizeButton)
         view.addSubview(textView)
+        view.addSubview(settingView)
+
+        settingView.snp.makeConstraints {
+            $0.height.equalTo(50)
+            $0.trailing.leading.equalToSuperview()
+            $0.bottom.equalTo(fontButton.snp.top)
+        }
 
         fontButton.snp.makeConstraints {
             $0.height.equalTo(50)

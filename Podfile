@@ -13,7 +13,6 @@ target 'FontChecker' do
   
   # UI (Autolayout, Image, Animation, Label)
   pod 'SnapKit', '~> 5.0.1'
-  pod 'Toaster', '~> 2.2.0'
   
   # Other Swift Utilities
   pod 'Then', '~> 2.6.0'
