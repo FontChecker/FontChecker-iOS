@@ -56,7 +56,7 @@ class ViewController: UIViewController {
         }
         
         textView.do {
-            $0.backgroundColor = .red
+            $0.backgroundColor = .white
             $0.isEditable = true
         }
     }
@@ -97,10 +97,12 @@ class ViewController: UIViewController {
             $0.bottom.equalToSuperview().inset(30)
             $0.trailing.equalToSuperview()
         }
-        
+
+        let safeAreaInsetsTop = (UIApplication.shared.windows.first { $0.isKeyWindow })?.safeAreaInsets.top ?? 0
+        let height = (navigationController?.navigationBar.bounds.height ?? 0) + safeAreaInsetsTop
         textView.snp.makeConstraints {
-            $0.top.equalTo(60)
-            $0.top.leading.trailing.equalToSuperview()
+            $0.top.equalTo(height)
+            $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(fontButton.snp.top)
         }
     }
