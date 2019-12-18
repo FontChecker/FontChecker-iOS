@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -147,13 +147,6 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		DD8FC5BC23A8A5B300A9B60F /* Models */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
 		DD8FC5BD23A8A5C600A9B60F /* Supports */ = {
 			isa = PBXGroup;
 			children = (
@@ -175,7 +168,6 @@
 			isa = PBXGroup;
 			children = (
 				DD8FC5BB23A8A59400A9B60F /* Views */,
-				DD8FC5BC23A8A5B300A9B60F /* Models */,
 				DD8FC58B23A89FFD00A9B60F /* AppDelegate.swift */,
 				DD8FC58D23A89FFD00A9B60F /* SceneDelegate.swift */,
 			);
@@ -192,7 +184,6 @@
 				03155E694E8A694D73468AA5 /* Pods-FontCheckerTests.debug.xcconfig */,
 				C1E5154C9AA2C55E57D0C8AC /* Pods-FontCheckerTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
