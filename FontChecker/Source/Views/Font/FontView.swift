@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class FontView: UIScrollView {
+class FontView: UIView {
     let disposeBag = DisposeBag()
 
     let lightButton = UIButton()
@@ -29,33 +29,23 @@ class FontView: UIScrollView {
 
     func bind(_ viewModel: ViewBindable) {
         lightButton.rx.controlEvent(.touchUpInside).asObservable()
-            .map { _ in
-                self.removeFromSuperview()
-                return UIFont.Weight.light
-            }
+            .map { UIFont.Weight.light }
             .bind(to: viewModel.fontData)
             .disposed(by: disposeBag)
 
         regularButton.rx.controlEvent(.touchUpInside).asObservable()
-            .map { _ in
-                self.removeFromSuperview()
-                return UIFont.Weight.regular
-            }
+            .map { UIFont.Weight.regular }
             .bind(to: viewModel.fontData)
             .disposed(by: disposeBag)
 
         boldButton.rx.controlEvent(.touchUpInside).asObservable()
-            .map { _ in
-                self.removeFromSuperview()
-                return UIFont.Weight.bold
-            }
+            .map { UIFont.Weight.bold }
             .bind(to: viewModel.fontData)
             .disposed(by: disposeBag)
     }
 
     func attribute() {
         self.do {
-            $0.showsHorizontalScrollIndicator = false
             $0.backgroundColor = .white
         }
 
@@ -87,21 +77,21 @@ class FontView: UIScrollView {
         self.addSubview(boldButton)
 
         lightButton.snp.makeConstraints {
-            $0.top.bottom.leading.equalToSuperview()
-            $0.width.equalToSuperview().dividedBy(3)
-            $0.height.bottom.leading.equalToSuperview()
+            $0.width.equalToSuperview().dividedBy(3.5)
+            $0.top.bottom.height.equalToSuperview()
+            $0.leading.equalToSuperview().inset(15)
         }
 
         regularButton.snp.makeConstraints {
-            $0.top.bottom.equalToSuperview()
-            $0.width.equalToSuperview().dividedBy(3)
-            $0.leading.equalTo(lightButton.snp.trailing)
-            $0.trailing.equalTo(boldButton.snp.leading)
+            $0.width.equalToSuperview().dividedBy(3.5)
+            $0.top.bottom.height.equalToSuperview()
+            $0.leading.equalTo(lightButton.snp.trailing).offset(15)
         }
 
         boldButton.snp.makeConstraints {
-            $0.width.equalToSuperview().dividedBy(3)
-            $0.top.bottom.trailing.equalToSuperview()
+            $0.width.equalToSuperview().dividedBy(3.5)
+            $0.top.bottom.height.equalToSuperview()
+            $0.leading.equalTo(regularButton.snp.trailing).offset(15)
         }
     }
 }

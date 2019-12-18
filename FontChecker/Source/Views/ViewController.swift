@@ -25,6 +25,9 @@ class ViewController: UIViewController {
     let sizeButton = UIButton()
     let textView = UITextView()
 
+    let doneButton = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: nil)
+    let cancleButton = UIBarButtonItem.init(barButtonSystemItem: .cancel, target: self, action: nil)
+
     override func viewDidLoad() {
         super.viewDidLoad()
         attribute()
@@ -32,9 +35,11 @@ class ViewController: UIViewController {
     }
 
     func bind(_ viewModel: ViewBindable) {
-        fontButton.rx.controlEvent(.touchUpInside)
-            .asObservable()
+        fontButton.rx.controlEvent(.touchUpInside).asObservable()
             .subscribe(onNext: { _ in
+                self.navigationItem.leftBarButtonItem = self.doneButton
+                self.navigationItem.rightBarButtonItem = self.cancleButton
+
                 let fontView = FontView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 60))
                 let model = viewModel
                 fontView.bind(model)
@@ -53,11 +58,30 @@ class ViewController: UIViewController {
                 self.textView.font = UIFont.systemFont(ofSize: 15, weight: $0)
             })
             .disposed(by: disposeBag)
+
+        Observable.merge(
+            doneButton.rx.tap.asObservable(),
+            cancleButton.rx.tap.asObservable()
+        )
+        .subscribe(onNext: {
+            self.navigationItem.leftBarButtonItem = nil
+            self.navigationItem.rightBarButtonItem = nil
+            guard let fontView = (self.view.subviews.filter { $0 is FontView }).first else {
+                return
+            }
+            fontView.removeFromSuperview()
+        })
+        .disposed(by: disposeBag)
     }
 
     func attribute() {
         view.backgroundColor = .white
         navigationController?.navigationBar.topItem?.title = "Font Checker"
+
+        textView.do {
+            $0.backgroundColor = .white
+            $0.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+        }
 
         fontButton.do {
             $0.setTitle("폰트변경", for: .normal)
@@ -86,19 +110,14 @@ class ViewController: UIViewController {
             $0.layer.borderWidth = 0.7
             $0.layer.borderColor = UIColor.gray.cgColor
         }
-
-        textView.do {
-            $0.backgroundColor = .white
-            $0.font = UIFont.systemFont(ofSize: 15, weight: .regular)
-        }
     }
 
     func layout() {
+        view.addSubview(textView)
         view.addSubview(fontButton)
         view.addSubview(bgColorButton)
         view.addSubview(textColorButton)
         view.addSubview(sizeButton)
-        view.addSubview(textView)
 
         fontButton.snp.makeConstraints {
             $0.height.equalTo(60)
