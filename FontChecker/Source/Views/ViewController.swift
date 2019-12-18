@@ -16,65 +16,65 @@ class ViewController: UIViewController {
     let textColorButton = UIButton()
     let sizeButton = UIButton()
     let textView = UITextView()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         attribute()
         layout()
     }
-    
+
     func attribute() {
         view.backgroundColor = .white
         navigationController?.navigationBar.topItem?.title = "Font Checker"
-        
+
         fontButton.do {
             $0.setTitle("폰트변경", for: .normal)
             $0.setTitleColor(.gray, for: .normal)
             $0.layer.borderWidth = 0.7
             $0.layer.borderColor = UIColor.gray.cgColor
         }
-        
+
         bgColorButton.do {
             $0.setTitle("BG색", for: .normal)
             $0.setTitleColor(.gray, for: .normal)
             $0.layer.borderWidth = 0.7
             $0.layer.borderColor = UIColor.gray.cgColor
         }
-        
+
         textColorButton.do {
             $0.setTitle("TEXT색", for: .normal)
             $0.setTitleColor(.gray, for: .normal)
             $0.layer.borderWidth = 0.7
             $0.layer.borderColor = UIColor.gray.cgColor
         }
-        
+
         sizeButton.do {
             $0.setTitle("TEXT크기", for: .normal)
             $0.setTitleColor(.gray, for: .normal)
             $0.layer.borderWidth = 0.7
             $0.layer.borderColor = UIColor.gray.cgColor
         }
-        
+
         textView.do {
             $0.backgroundColor = .white
             $0.isEditable = true
         }
     }
-    
+
     func layout() {
         view.addSubview(fontButton)
         view.addSubview(bgColorButton)
         view.addSubview(textColorButton)
         view.addSubview(sizeButton)
         view.addSubview(textView)
-        
+
         fontButton.snp.makeConstraints {
             $0.height.equalTo(50)
             $0.width.equalToSuperview().dividedBy(4)
             $0.bottom.equalToSuperview().inset(30)
             $0.leading.equalToSuperview()
         }
-        
+
         bgColorButton.snp.makeConstraints {
             $0.height.equalTo(50)
             $0.width.equalToSuperview().dividedBy(4)
@@ -82,7 +82,7 @@ class ViewController: UIViewController {
             $0.leading.equalTo(fontButton.snp.trailing)
             $0.trailing.equalTo(textColorButton.snp.leading)
         }
-        
+
         textColorButton.snp.makeConstraints {
             $0.height.equalTo(50)
             $0.width.equalToSuperview().dividedBy(4)
@@ -90,7 +90,7 @@ class ViewController: UIViewController {
             $0.leading.equalTo(bgColorButton.snp.trailing)
             $0.trailing.equalTo(sizeButton.snp.leading)
         }
-        
+
         sizeButton.snp.makeConstraints {
             $0.height.equalTo(50)
             $0.width.equalToSuperview().dividedBy(4)
@@ -107,4 +107,3 @@ class ViewController: UIViewController {
         }
     }
 }
-

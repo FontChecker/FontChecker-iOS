@@ -17,6 +17,7 @@ target 'FontChecker' do
   
   # Other Swift Utilities
   pod 'Then', '~> 2.6.0'
+  pod 'SwiftLint'
 
   target 'FontCheckerTests' do
     inherit! :search_paths

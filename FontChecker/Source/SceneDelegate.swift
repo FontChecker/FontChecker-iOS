@@ -12,13 +12,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScence = (scene as? UIWindowScene) else { return }
-        
+
         window = UIWindow(frame: UIScreen.main.bounds)
         let rootViewController = ViewController()
-        
         window?.makeKeyAndVisible()
         window?.windowScene = windowScence
         window?.rootViewController = UINavigationController(rootViewController: rootViewController)
@@ -52,6 +50,4 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
 
-
 }
-

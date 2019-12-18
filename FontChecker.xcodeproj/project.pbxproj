@@ -10,6 +10,7 @@
 		40F2C6B16F1C50FD5B52D84D /* Pods_FontChecker_FontCheckerUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 500C1545BC047A43B0E28111 /* Pods_FontChecker_FontCheckerUITests.framework */; };
 		8495B913B9145AEF8C6CF52A /* Pods_FontChecker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48C870633EC1BF43C3787B28 /* Pods_FontChecker.framework */; };
 		CF253C6A27F5857B9D8E3987 /* Pods_FontCheckerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB7C7C524480CD47CFAA9FF0 /* Pods_FontCheckerTests.framework */; };
+		DD6881CD23A9BA6900941FDE /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = DD6881CC23A9BA6900941FDE /* .swiftlint.yml */; };
 		DD8FC58C23A89FFD00A9B60F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8FC58B23A89FFD00A9B60F /* AppDelegate.swift */; };
 		DD8FC58E23A89FFD00A9B60F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8FC58D23A89FFD00A9B60F /* SceneDelegate.swift */; };
 		DD8FC59023A89FFD00A9B60F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8FC58F23A89FFD00A9B60F /* ViewController.swift */; };
@@ -46,6 +47,7 @@
 		A33B6CCCBBF0466D5C33006C /* Pods-FontChecker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FontChecker.debug.xcconfig"; path = "Target Support Files/Pods-FontChecker/Pods-FontChecker.debug.xcconfig"; sourceTree = "<group>"; };
 		BB7C7C524480CD47CFAA9FF0 /* Pods_FontCheckerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FontCheckerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1E5154C9AA2C55E57D0C8AC /* Pods-FontCheckerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FontCheckerTests.release.xcconfig"; path = "Target Support Files/Pods-FontCheckerTests/Pods-FontCheckerTests.release.xcconfig"; sourceTree = "<group>"; };
+		DD6881CC23A9BA6900941FDE /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		DD8FC58823A89FFD00A9B60F /* FontChecker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FontChecker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD8FC58B23A89FFD00A9B60F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DD8FC58D23A89FFD00A9B60F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 		DD8FC57F23A89FFD00A9B60F = {
 			isa = PBXGroup;
 			children = (
+				DD6881CC23A9BA6900941FDE /* .swiftlint.yml */,
 				DD8FC58A23A89FFD00A9B60F /* FontChecker */,
 				DD8FC5A123A89FFE00A9B60F /* FontCheckerTests */,
 				DD8FC5AC23A89FFE00A9B60F /* FontCheckerUITests */,
@@ -209,6 +212,7 @@
 				DD8FC58523A89FFD00A9B60F /* Frameworks */,
 				DD8FC58623A89FFD00A9B60F /* Resources */,
 				C5431FA6C940C6456E23575F /* [CP] Embed Pods Frameworks */,
+				DD6881CB23A9B9D700941FDE /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -306,6 +310,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD6881CD23A9BA6900941FDE /* .swiftlint.yml in Resources */,
 				DD8FC59823A89FFE00A9B60F /* LaunchScreen.storyboard in Resources */,
 				DD8FC59523A89FFE00A9B60F /* Assets.xcassets in Resources */,
 			);
@@ -427,6 +432,23 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		DD6881CB23A9B9D700941FDE /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${PODS_ROOT}/SwiftLint/swiftlint\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
