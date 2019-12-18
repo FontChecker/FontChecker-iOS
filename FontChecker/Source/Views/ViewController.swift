@@ -12,6 +12,10 @@ import RxCocoa
 import Then
 import SnapKit
 
+protocol ViewBindable {
+    var fontData: PublishRelay<UIFont.Weight> { get }
+}
+
 class ViewController: UIViewController {
     let disposeBag = DisposeBag()
 
@@ -21,27 +25,39 @@ class ViewController: UIViewController {
     let sizeButton = UIButton()
     let textView = UITextView()
 
-    let settingView = UIScrollView()
-
     override func viewDidLoad() {
         super.viewDidLoad()
         attribute()
         layout()
     }
 
-    func bind() {
+    func bind(_ viewModel: ViewBindable) {
+        fontButton.rx.controlEvent(.touchUpInside)
+            .asObservable()
+            .subscribe(onNext: { _ in
+                let fontView = FontView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 60))
+                let model = viewModel
+                fontView.bind(model)
+
+                self.view.addSubview(fontView)
+                fontView.snp.makeConstraints {
+                    $0.leading.trailing.equalToSuperview()
+                    $0.bottom.equalTo(self.fontButton.snp.bottom)
+                    $0.height.equalTo(60)
+                }
+            })
+            .disposed(by: disposeBag)
+
+        viewModel.fontData.asObservable()
+            .subscribe(onNext: {
+                self.textView.font = UIFont.systemFont(ofSize: 15, weight: $0)
+            })
+            .disposed(by: disposeBag)
     }
 
     func attribute() {
         view.backgroundColor = .white
         navigationController?.navigationBar.topItem?.title = "Font Checker"
-
-        settingView.do {
-            $0.backgroundColor = .red
-            $0.bounces = false
-            $0.showsHorizontalScrollIndicator = false
-            $0.isHidden = true
-        }
 
         fontButton.do {
             $0.setTitle("폰트변경", for: .normal)
@@ -73,7 +89,7 @@ class ViewController: UIViewController {
 
         textView.do {
             $0.backgroundColor = .white
-            $0.isEditable = true
+            $0.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         }
     }
 
@@ -83,23 +99,16 @@ class ViewController: UIViewController {
         view.addSubview(textColorButton)
         view.addSubview(sizeButton)
         view.addSubview(textView)
-        view.addSubview(settingView)
-
-        settingView.snp.makeConstraints {
-            $0.height.equalTo(50)
-            $0.trailing.leading.equalToSuperview()
-            $0.bottom.equalTo(fontButton.snp.top)
-        }
 
         fontButton.snp.makeConstraints {
-            $0.height.equalTo(50)
+            $0.height.equalTo(60)
             $0.width.equalToSuperview().dividedBy(4)
             $0.bottom.equalToSuperview().inset(30)
             $0.leading.equalToSuperview()
         }
 
         bgColorButton.snp.makeConstraints {
-            $0.height.equalTo(50)
+            $0.height.equalTo(60)
             $0.width.equalToSuperview().dividedBy(4)
             $0.bottom.equalToSuperview().inset(30)
             $0.leading.equalTo(fontButton.snp.trailing)
@@ -107,7 +116,7 @@ class ViewController: UIViewController {
         }
 
         textColorButton.snp.makeConstraints {
-            $0.height.equalTo(50)
+            $0.height.equalTo(60)
             $0.width.equalToSuperview().dividedBy(4)
             $0.bottom.equalToSuperview().inset(30)
             $0.leading.equalTo(bgColorButton.snp.trailing)
@@ -115,7 +124,7 @@ class ViewController: UIViewController {
         }
 
         sizeButton.snp.makeConstraints {
-            $0.height.equalTo(50)
+            $0.height.equalTo(60)
             $0.width.equalToSuperview().dividedBy(4)
             $0.bottom.equalToSuperview().inset(30)
             $0.trailing.equalToSuperview()

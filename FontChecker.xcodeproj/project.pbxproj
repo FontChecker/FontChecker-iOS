@@ -10,6 +10,8 @@
 		40F2C6B16F1C50FD5B52D84D /* Pods_FontChecker_FontCheckerUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 500C1545BC047A43B0E28111 /* Pods_FontChecker_FontCheckerUITests.framework */; };
 		8495B913B9145AEF8C6CF52A /* Pods_FontChecker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48C870633EC1BF43C3787B28 /* Pods_FontChecker.framework */; };
 		CF253C6A27F5857B9D8E3987 /* Pods_FontCheckerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB7C7C524480CD47CFAA9FF0 /* Pods_FontCheckerTests.framework */; };
+		DD5CCB5323A9E1AE00250A17 /* FontView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD5CCB5223A9E1AE00250A17 /* FontView.swift */; };
+		DD5CCB5523A9E80B00250A17 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD5CCB5423A9E80B00250A17 /* ViewModel.swift */; };
 		DD6881CD23A9BA6900941FDE /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = DD6881CC23A9BA6900941FDE /* .swiftlint.yml */; };
 		DD8FC58C23A89FFD00A9B60F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8FC58B23A89FFD00A9B60F /* AppDelegate.swift */; };
 		DD8FC58E23A89FFD00A9B60F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8FC58D23A89FFD00A9B60F /* SceneDelegate.swift */; };
@@ -47,6 +49,8 @@
 		A33B6CCCBBF0466D5C33006C /* Pods-FontChecker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FontChecker.debug.xcconfig"; path = "Target Support Files/Pods-FontChecker/Pods-FontChecker.debug.xcconfig"; sourceTree = "<group>"; };
 		BB7C7C524480CD47CFAA9FF0 /* Pods_FontCheckerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FontCheckerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1E5154C9AA2C55E57D0C8AC /* Pods-FontCheckerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FontCheckerTests.release.xcconfig"; path = "Target Support Files/Pods-FontCheckerTests/Pods-FontCheckerTests.release.xcconfig"; sourceTree = "<group>"; };
+		DD5CCB5223A9E1AE00250A17 /* FontView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontView.swift; sourceTree = "<group>"; };
+		DD5CCB5423A9E80B00250A17 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		DD6881CC23A9BA6900941FDE /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		DD8FC58823A89FFD00A9B60F /* FontChecker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FontChecker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD8FC58B23A89FFD00A9B60F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -91,6 +95,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DD5CCB5123A9E19600250A17 /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				DD5CCB5223A9E1AE00250A17 /* FontView.swift */,
+			);
+			path = Font;
+			sourceTree = "<group>";
+		};
 		DD8FC57F23A89FFD00A9B60F = {
 			isa = PBXGroup;
 			children = (
@@ -146,6 +158,8 @@
 			isa = PBXGroup;
 			children = (
 				DD8FC58F23A89FFD00A9B60F /* ViewController.swift */,
+				DD5CCB5423A9E80B00250A17 /* ViewModel.swift */,
+				DD5CCB5123A9E19600250A17 /* Font */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -457,7 +471,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD5CCB5523A9E80B00250A17 /* ViewModel.swift in Sources */,
 				DD8FC59023A89FFD00A9B60F /* ViewController.swift in Sources */,
+				DD5CCB5323A9E1AE00250A17 /* FontView.swift in Sources */,
 				DD8FC58C23A89FFD00A9B60F /* AppDelegate.swift in Sources */,
 				DD8FC58E23A89FFD00A9B60F /* SceneDelegate.swift in Sources */,
 			);
