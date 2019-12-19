@@ -16,6 +16,9 @@ class FontView: UIView {
     let lightButton = UIButton()
     let regularButton = UIButton()
     let boldButton = UIButton()
+    
+    let buttonLeading: CGFloat = 15
+    let buttonBorderWidth: CGFloat = 0.7
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -28,20 +31,16 @@ class FontView: UIView {
     }
 
     func bind(_ viewModel: ViewBindable) {
-        lightButton.rx.controlEvent(.touchUpInside).asObservable()
-            .map { UIFont.Weight.light }
-            .bind(to: viewModel.fontData)
-            .disposed(by: disposeBag)
-
-        regularButton.rx.controlEvent(.touchUpInside).asObservable()
-            .map { UIFont.Weight.regular }
-            .bind(to: viewModel.fontData)
-            .disposed(by: disposeBag)
-
-        boldButton.rx.controlEvent(.touchUpInside).asObservable()
-            .map { UIFont.Weight.bold }
-            .bind(to: viewModel.fontData)
-            .disposed(by: disposeBag)
+        Observable.merge(
+            lightButton.rx.controlEvent(.touchUpInside).asObservable()
+                .map{ UIFont.Weight.light },
+            regularButton.rx.controlEvent(.touchUpInside).asObservable()
+                .map{ UIFont.Weight.regular },
+            boldButton.rx.controlEvent(.touchUpInside).asObservable()
+                .map{ UIFont.Weight.bold }
+        )
+        .bind(to: viewModel.fontData)
+        .disposed(by: disposeBag)
     }
 
     func attribute() {
@@ -52,21 +51,21 @@ class FontView: UIView {
         lightButton.do {
             $0.setTitle("light", for: .normal)
             $0.setTitleColor(.gray, for: .normal)
-            $0.layer.borderWidth = 0.7
+            $0.layer.borderWidth = buttonBorderWidth
             $0.layer.borderColor = UIColor.gray.cgColor
         }
 
         regularButton.do {
             $0.setTitle("regular", for: .normal)
             $0.setTitleColor(.gray, for: .normal)
-            $0.layer.borderWidth = 0.7
+            $0.layer.borderWidth = buttonBorderWidth
             $0.layer.borderColor = UIColor.gray.cgColor
         }
 
         boldButton.do {
             $0.setTitle("bold", for: .normal)
             $0.setTitleColor(.gray, for: .normal)
-            $0.layer.borderWidth = 0.7
+            $0.layer.borderWidth = buttonBorderWidth
             $0.layer.borderColor = UIColor.gray.cgColor
         }
     }
@@ -75,23 +74,25 @@ class FontView: UIView {
         self.addSubview(lightButton)
         self.addSubview(regularButton)
         self.addSubview(boldButton)
-
+        
+        let buttonWidthRatio = Float(self.subviews.count) + 0.5
+        
         lightButton.snp.makeConstraints {
-            $0.width.equalToSuperview().dividedBy(3.5)
+            $0.width.equalToSuperview().dividedBy(buttonWidthRatio)
             $0.top.bottom.height.equalToSuperview()
-            $0.leading.equalToSuperview().inset(15)
+            $0.leading.equalToSuperview().inset(buttonLeading)
         }
 
         regularButton.snp.makeConstraints {
-            $0.width.equalToSuperview().dividedBy(3.5)
+            $0.width.equalToSuperview().dividedBy(buttonWidthRatio)
             $0.top.bottom.height.equalToSuperview()
-            $0.leading.equalTo(lightButton.snp.trailing).offset(15)
+            $0.leading.equalTo(lightButton.snp.trailing).offset(buttonLeading)
         }
 
         boldButton.snp.makeConstraints {
-            $0.width.equalToSuperview().dividedBy(3.5)
+            $0.width.equalToSuperview().dividedBy(buttonWidthRatio)
             $0.top.bottom.height.equalToSuperview()
-            $0.leading.equalTo(regularButton.snp.trailing).offset(15)
+            $0.leading.equalTo(regularButton.snp.trailing).offset(buttonLeading)
         }
     }
 }
