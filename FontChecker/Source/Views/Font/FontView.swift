@@ -13,12 +13,9 @@ import RxCocoa
 class FontView: UIView {
     let disposeBag = DisposeBag()
 
-    let lightButton = UIButton()
-    let regularButton = UIButton()
-    let boldButton = UIButton()
-    
-    let buttonLeading: CGFloat = 15
-    let buttonBorderWidth: CGFloat = 0.7
+    let lightButton = FCButton()
+    let regularButton = FCButton()
+    let boldButton = FCButton()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -30,7 +27,7 @@ class FontView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func bind(_ viewModel: ViewBindable) {
+    func bind(_ viewModel: ViewModel) {
         Observable.merge(
             lightButton.rx.controlEvent(.touchUpInside).asObservable()
                 .map{ UIFont.Weight.light },
@@ -44,55 +41,20 @@ class FontView: UIView {
     }
 
     func attribute() {
-        self.do {
-            $0.backgroundColor = .white
-        }
+        self.backgroundColor = .white
 
-        lightButton.do {
-            $0.setTitle("light", for: .normal)
-            $0.setTitleColor(.gray, for: .normal)
-            $0.layer.borderWidth = buttonBorderWidth
-            $0.layer.borderColor = UIColor.gray.cgColor
-        }
-
-        regularButton.do {
-            $0.setTitle("regular", for: .normal)
-            $0.setTitleColor(.gray, for: .normal)
-            $0.layer.borderWidth = buttonBorderWidth
-            $0.layer.borderColor = UIColor.gray.cgColor
-        }
-
-        boldButton.do {
-            $0.setTitle("bold", for: .normal)
-            $0.setTitleColor(.gray, for: .normal)
-            $0.layer.borderWidth = buttonBorderWidth
-            $0.layer.borderColor = UIColor.gray.cgColor
-        }
+        lightButton.setTitle("light", for: .normal)
+        regularButton.setTitle("regular", for: .normal)
+        boldButton.setTitle("bold", for: .normal)
     }
 
     func layout() {
-        self.addSubview(lightButton)
-        self.addSubview(regularButton)
-        self.addSubview(boldButton)
+        self.addEqaulRatioSubviews([lightButton, regularButton, boldButton], ratio: 0.5, margin: 15)
         
-        let buttonWidthRatio = Float(self.subviews.count) + 0.5
-        
-        lightButton.snp.makeConstraints {
-            $0.width.equalToSuperview().dividedBy(buttonWidthRatio)
-            $0.top.bottom.height.equalToSuperview()
-            $0.leading.equalToSuperview().inset(buttonLeading)
-        }
-
-        regularButton.snp.makeConstraints {
-            $0.width.equalToSuperview().dividedBy(buttonWidthRatio)
-            $0.top.bottom.height.equalToSuperview()
-            $0.leading.equalTo(lightButton.snp.trailing).offset(buttonLeading)
-        }
-
-        boldButton.snp.makeConstraints {
-            $0.width.equalToSuperview().dividedBy(buttonWidthRatio)
-            $0.top.bottom.height.equalToSuperview()
-            $0.leading.equalTo(regularButton.snp.trailing).offset(buttonLeading)
+        _ = [lightButton, regularButton, boldButton].map {
+            $0.snp.makeConstraints {
+                $0.top.bottom.height.equalToSuperview()
+            }
         }
     }
 }

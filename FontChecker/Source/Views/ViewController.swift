@@ -19,17 +19,16 @@ protocol ViewBindable {
 class ViewController: UIViewController {
     let disposeBag = DisposeBag()
 
-    let fontButton = UIButton()
-    let bgColorButton = UIButton()
-    let textColorButton = UIButton()
-    let sizeButton = UIButton()
+    let fontButton = FCButton()
+    let bgColorButton = FCButton()
+    let textColorButton = FCButton()
+    let sizeButton = FCButton()
     let textView = UITextView()
     let doneButton = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: nil)
     let cancleButton = UIBarButtonItem.init(barButtonSystemItem: .cancel, target: self, action: nil)
-    
+
     let bottomMargin: CGFloat = 30
     let buttonHeight: CGFloat = 60
-    let buttonBorderWidth: CGFloat = 0.7
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,15 +36,14 @@ class ViewController: UIViewController {
         layout()
     }
 
-    func bind(_ viewModel: ViewBindable) {
+    func bind(_ viewModel: ViewModel) {
         fontButton.rx.controlEvent(.touchUpInside).asObservable()
             .subscribe(onNext: { _ in
                 self.navigationItem.leftBarButtonItem = self.doneButton
                 self.navigationItem.rightBarButtonItem = self.cancleButton
 
                 let fontView = FontView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.buttonHeight))
-                let model = viewModel
-                fontView.bind(model)
+                fontView.bind(viewModel)
                 self.view.addSubview(fontView)
                 fontView.snp.makeConstraints {
                     $0.leading.trailing.equalToSuperview()
@@ -83,72 +81,21 @@ class ViewController: UIViewController {
             $0.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         }
 
-        fontButton.do {
-            $0.setTitle("폰트변경", for: .normal)
-            $0.setTitleColor(.gray, for: .normal)
-            $0.layer.borderWidth = buttonBorderWidth
-            $0.layer.borderColor = UIColor.gray.cgColor
-        }
-
-        bgColorButton.do {
-            $0.setTitle("BG색", for: .normal)
-            $0.setTitleColor(.gray, for: .normal)
-            $0.layer.borderWidth = buttonBorderWidth
-            $0.layer.borderColor = UIColor.gray.cgColor
-        }
-
-        textColorButton.do {
-            $0.setTitle("TEXT색", for: .normal)
-            $0.setTitleColor(.gray, for: .normal)
-            $0.layer.borderWidth = buttonBorderWidth
-            $0.layer.borderColor = UIColor.gray.cgColor
-        }
-
-        sizeButton.do {
-            $0.setTitle("TEXT크기", for: .normal)
-            $0.setTitleColor(.gray, for: .normal)
-            $0.layer.borderWidth = buttonBorderWidth
-            $0.layer.borderColor = UIColor.gray.cgColor
-        }
+        fontButton.setTitle("폰트 변경", for: .normal)
+        bgColorButton.setTitle("BG색", for: .normal)
+        textColorButton.setTitle("TEXT색", for: .normal)
+        sizeButton.setTitle("TEXT크기", for: .normal)
     }
 
     func layout() {
         view.addSubview(textView)
-        view.addSubview(fontButton)
-        view.addSubview(bgColorButton)
-        view.addSubview(textColorButton)
-        view.addSubview(sizeButton)
+        view.addEqaulRatioSubviews([fontButton, bgColorButton, textColorButton, sizeButton])
         
-        let buttonWidthRatio = view.subviews.filter { $0 is UIButton }.count
-
-        fontButton.snp.makeConstraints {
-            $0.height.equalTo(buttonHeight)
-            $0.width.equalToSuperview().dividedBy(buttonWidthRatio)
-            $0.bottom.equalToSuperview().inset(bottomMargin)
-            $0.leading.equalToSuperview()
-        }
-
-        bgColorButton.snp.makeConstraints {
-            $0.height.equalTo(buttonHeight)
-            $0.width.equalToSuperview().dividedBy(buttonWidthRatio)
-            $0.bottom.equalToSuperview().inset(bottomMargin)
-            $0.leading.equalTo(fontButton.snp.trailing)
-            $0.trailing.equalTo(textColorButton.snp.leading)
-        }
-
-        textColorButton.snp.makeConstraints {
-            $0.height.equalTo(buttonHeight)
-            $0.width.equalToSuperview().dividedBy(buttonWidthRatio)
-            $0.bottom.equalToSuperview().inset(bottomMargin)
-            $0.leading.equalTo(bgColorButton.snp.trailing)
-            $0.trailing.equalTo(sizeButton.snp.leading)
-        }
-
-        sizeButton.snp.makeConstraints {
-            $0.height.equalTo(buttonHeight)
-            $0.width.equalToSuperview().dividedBy(buttonWidthRatio)
-            $0.bottom.equalToSuperview().inset(bottomMargin)
-            $0.trailing.equalToSuperview()
+        _ = [fontButton, bgColorButton, textColorButton, sizeButton].map {
+            $0.snp.makeConstraints {
+                $0.height.equalTo(buttonHeight)
+                $0.bottom.equalToSuperview().inset(bottomMargin)
+            }
         }
 
         let safeAreaInsetsTop = (UIApplication.shared.windows.first { $0.isKeyWindow })?.safeAreaInsets.top ?? 0

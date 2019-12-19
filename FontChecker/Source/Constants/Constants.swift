@@ -9,6 +9,4 @@
 import Foundation
 
 // 공통 Constants 입니다.
-struct Constants {
-    
-}
+struct Constants { }
