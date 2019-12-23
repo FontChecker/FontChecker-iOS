@@ -13,7 +13,8 @@ import Then
 import SnapKit
 
 protocol ViewBindable {
-    var fontData: PublishRelay<UIFont.Weight> { get }
+    var fontViewModel: FontViewBindable { get }
+    var bgColorViewModel: BgColorViewBindable { get }
 }
 
 class ViewController: UIViewController {
@@ -27,8 +28,8 @@ class ViewController: UIViewController {
     let doneButton = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: nil)
     let cancleButton = UIBarButtonItem.init(barButtonSystemItem: .cancel, target: self, action: nil)
 
-    let bottomMargin: CGFloat = 30
     let buttonHeight: CGFloat = 60
+    let bottomMargin: CGFloat = 30
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,26 +37,35 @@ class ViewController: UIViewController {
         layout()
     }
 
-    func bind(_ viewModel: ViewModel) {
-        fontButton.rx.controlEvent(.touchUpInside).asObservable()
-            .subscribe(onNext: { _ in
+    func bind(_ viewModel: ViewBindable) {
+        let fontButtonDidTap = fontButton.rx.controlEvent(.touchUpInside)
+            .map { _ -> UIView in
+                let view = FontView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.buttonHeight))
+                view.bind(viewModel.fontViewModel)
+                return view
+            }
+
+        let bgColorButtonDidTap = bgColorButton.rx.controlEvent(.touchUpInside)
+            .map { _ -> UIView in
+                let view = BgColorView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 100))
+                view.bind(viewModel.bgColorViewModel)
+                return view
+            }
+
+        Observable.merge(
+            fontButtonDidTap.asObservable(),
+            bgColorButtonDidTap.asObservable()
+        )
+            .subscribe(onNext: { subview in
                 self.navigationItem.leftBarButtonItem = self.doneButton
                 self.navigationItem.rightBarButtonItem = self.cancleButton
 
-                let fontView = FontView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.buttonHeight))
-                fontView.bind(viewModel)
-                self.view.addSubview(fontView)
-                fontView.snp.makeConstraints {
+                self.view.addSubview(subview)
+                subview.snp.makeConstraints {
                     $0.leading.trailing.equalToSuperview()
                     $0.bottom.equalTo(self.fontButton.snp.bottom)
-                    $0.height.equalTo(self.buttonHeight)
+                    $0.height.equalTo(subview.frame.height)
                 }
-            })
-            .disposed(by: disposeBag)
-
-        viewModel.fontData.asObservable()
-            .subscribe(onNext: {
-                self.textView.font = UIFont.systemFont(ofSize: 15, weight: $0)
             })
             .disposed(by: disposeBag)
 
@@ -63,13 +73,19 @@ class ViewController: UIViewController {
             doneButton.rx.tap.asObservable(),
             cancleButton.rx.tap.asObservable()
         )
-        .subscribe(onNext: {
-            self.navigationItem.leftBarButtonItem = nil
-            self.navigationItem.rightBarButtonItem = nil
-            guard let fontView = (self.view.subviews.filter { $0 is FontView }).first else { return }
-            fontView.removeFromSuperview()
-        })
-        .disposed(by: disposeBag)
+            .subscribe(onNext: {
+                self.navigationItem.leftBarButtonItem = nil
+                self.navigationItem.rightBarButtonItem = nil
+                guard let fcView = self.view.subviews.last else { return }
+                fcView.removeFromSuperview()
+            })
+            .disposed(by: disposeBag)
+
+        viewModel.fontViewModel.fontData.asObservable()
+            .subscribe(onNext: {
+                self.textView.font = UIFont.systemFont(ofSize: 15, weight: $0)
+            })
+            .disposed(by: disposeBag)
     }
 
     func attribute() {
@@ -90,7 +106,7 @@ class ViewController: UIViewController {
     func layout() {
         view.addSubview(textView)
         view.addEqaulRatioSubviews([fontButton, bgColorButton, textColorButton, sizeButton])
-        
+
         _ = [fontButton, bgColorButton, textColorButton, sizeButton].map {
             $0.snp.makeConstraints {
                 $0.height.equalTo(buttonHeight)

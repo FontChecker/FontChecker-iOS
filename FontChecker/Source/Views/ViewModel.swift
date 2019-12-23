@@ -12,8 +12,12 @@ import RxCocoa
 
 struct ViewModel: ViewBindable {
     let disposeBag = DisposeBag()
+    
+    let fontViewModel: FontViewBindable
+    let bgColorViewModel: BgColorViewBindable
 
-    let fontData = PublishRelay<UIFont.Weight>()
-
-    init() { }
+    init() {
+        self.fontViewModel = FontViewModel()
+        self.bgColorViewModel = BgColorViewModel()
+    }
 }

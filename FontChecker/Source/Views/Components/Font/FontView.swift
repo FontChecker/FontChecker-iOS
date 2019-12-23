@@ -10,24 +10,18 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class FontView: UIView {
-    let disposeBag = DisposeBag()
+protocol FontViewBindable {
+    var fontData: PublishRelay<UIFont.Weight> { get }
+}
 
+class FontView: SettingView<FontViewBindable> {
     let lightButton = FCButton()
     let regularButton = FCButton()
     let boldButton = FCButton()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        attribute()
-        layout()
-    }
+    override func bind(_ viewModel: FontViewBindable) {
+        self.disposeBag = DisposeBag()
 
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func bind(_ viewModel: ViewModel) {
         Observable.merge(
             lightButton.rx.controlEvent(.touchUpInside).asObservable()
                 .map{ UIFont.Weight.light },
@@ -40,7 +34,7 @@ class FontView: UIView {
         .disposed(by: disposeBag)
     }
 
-    func attribute() {
+    override func attribute() {
         self.backgroundColor = .white
 
         lightButton.setTitle("light", for: .normal)
@@ -48,9 +42,9 @@ class FontView: UIView {
         boldButton.setTitle("bold", for: .normal)
     }
 
-    func layout() {
+    override func layout() {
         self.addEqaulRatioSubviews([lightButton, regularButton, boldButton], ratio: 0.5, margin: 15)
-        
+
         _ = [lightButton, regularButton, boldButton].map {
             $0.snp.makeConstraints {
                 $0.top.bottom.height.equalToSuperview()
