@@ -12,7 +12,7 @@ import RxCocoa
 
 struct FontViewModel: FontViewBindable {
     let disposeBag = DisposeBag()
-    
+
     let fontData = PublishRelay<UIFont.Weight>()
 
     init() { }

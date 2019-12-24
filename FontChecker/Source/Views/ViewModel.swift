@@ -12,7 +12,7 @@ import RxCocoa
 
 struct ViewModel: ViewBindable {
     let disposeBag = DisposeBag()
-    
+
     let fontViewModel: FontViewBindable
     let bgColorViewModel: BgColorViewBindable
 

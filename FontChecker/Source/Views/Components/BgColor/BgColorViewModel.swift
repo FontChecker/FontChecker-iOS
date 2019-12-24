@@ -12,8 +12,8 @@ import RxCocoa
 
 struct BgColorViewModel: BgColorViewBindable {
     let disposeBag = DisposeBag()
-    
+
     let bgColorData = PublishRelay<UIColor>()
-    
+
     init() { }
 }

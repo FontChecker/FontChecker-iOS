@@ -30,6 +30,7 @@ class ViewController: UIViewController {
 
     let buttonHeight: CGFloat = 60
     let bottomMargin: CGFloat = 30
+    let bgColorHeight: CGFloat = 180
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,14 +44,14 @@ class ViewController: UIViewController {
                 let view = FontView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.buttonHeight))
                 view.bind(viewModel.fontViewModel)
                 return view
-            }
+        }
 
         let bgColorButtonDidTap = bgColorButton.rx.controlEvent(.touchUpInside)
             .map { _ -> UIView in
-                let view = BgColorView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 100))
+                let view = BgColorView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.bgColorHeight))
                 view.bind(viewModel.bgColorViewModel)
                 return view
-            }
+        }
 
         Observable.merge(
             fontButtonDidTap.asObservable(),
@@ -69,6 +70,18 @@ class ViewController: UIViewController {
             })
             .disposed(by: disposeBag)
 
+        viewModel.fontViewModel.fontData.asObservable()
+            .subscribe(onNext: {
+                self.textView.font = UIFont.systemFont(ofSize: 15, weight: $0)
+            })
+            .disposed(by: disposeBag)
+
+        viewModel.bgColorViewModel.bgColorData.asObservable()
+            .subscribe(onNext: {
+                self.textView.textColor = $0
+            })
+            .disposed(by: disposeBag)
+
         Observable.merge(
             doneButton.rx.tap.asObservable(),
             cancleButton.rx.tap.asObservable()
@@ -78,12 +91,6 @@ class ViewController: UIViewController {
                 self.navigationItem.rightBarButtonItem = nil
                 guard let fcView = self.view.subviews.last else { return }
                 fcView.removeFromSuperview()
-            })
-            .disposed(by: disposeBag)
-
-        viewModel.fontViewModel.fontData.asObservable()
-            .subscribe(onNext: {
-                self.textView.font = UIFont.systemFont(ofSize: 15, weight: $0)
             })
             .disposed(by: disposeBag)
     }
@@ -105,7 +112,7 @@ class ViewController: UIViewController {
 
     func layout() {
         view.addSubview(textView)
-        view.addEqaulRatioSubviews([fontButton, bgColorButton, textColorButton, sizeButton])
+        view.addHorizentalSubviews([fontButton, bgColorButton, textColorButton, sizeButton])
 
         _ = [fontButton, bgColorButton, textColorButton, sizeButton].map {
             $0.snp.makeConstraints {

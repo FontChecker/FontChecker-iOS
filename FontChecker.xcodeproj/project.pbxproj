@@ -113,8 +113,8 @@
 			isa = PBXGroup;
 			children = (
 				DD22449C23AC86950007065A /* SettingView.swift */,
-				DD83EE7423B0A70800972145 /* BgColor */,
 				DD83EE7323B0A6FF00972145 /* Font */,
+				DD83EE7423B0A70800972145 /* BgColor */,
 			);
 			path = Components;
 			sourceTree = "<group>";
