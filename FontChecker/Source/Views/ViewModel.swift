@@ -16,6 +16,7 @@ struct ViewModel: ViewBindable {
     let fontViewModel: FontViewBindable
     let bgColorViewModel: ColorViewBindable
     let textColorViewModel: ColorViewBindable
+    let sizeViewModel: SizeViewBindable
 
     var attributes = PublishRelay<[NSAttributedString.Key: Any]>()
 
@@ -23,10 +24,17 @@ struct ViewModel: ViewBindable {
         self.fontViewModel = FontViewModel()
         self.bgColorViewModel = ColorViewModel()
         self.textColorViewModel = ColorViewModel()
+        self.sizeViewModel = SizeViewModel()
+
+        let fontChange = Observable.combineLatest(
+            fontViewModel.fontData.asObservable().startWith(UIFont.Weight.medium),
+            sizeViewModel.sizeData.asObservable().startWith(15))
+            .map { (weight, size) -> [NSAttributedString.Key: Any] in
+                return [NSAttributedString.Key.font: UIFont.systemFont(ofSize: size, weight: weight)]
+        }
 
         Observable.merge(
-            fontViewModel.fontData.asObservable()
-                .map{ [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15, weight: $0)] },
+            fontChange,
             bgColorViewModel.colorData.asObservable()
                 .map{ [NSAttributedString.Key.backgroundColor: $0] },
             textColorViewModel.colorData.asObservable()

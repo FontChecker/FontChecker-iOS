@@ -24,6 +24,8 @@
 		DD8FC59823A89FFE00A9B60F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DD8FC59623A89FFE00A9B60F /* LaunchScreen.storyboard */; };
 		DD8FC5A323A89FFE00A9B60F /* FontCheckerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8FC5A223A89FFE00A9B60F /* FontCheckerTests.swift */; };
 		DD8FC5AE23A89FFE00A9B60F /* FontCheckerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8FC5AD23A89FFE00A9B60F /* FontCheckerUITests.swift */; };
+		DD9FE6CE23B4ADDA00117CFC /* SizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9FE6CD23B4ADDA00117CFC /* SizeView.swift */; };
+		DD9FE6D023B4ADE300117CFC /* SizeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9FE6CF23B4ADE300117CFC /* SizeViewModel.swift */; };
 		DDCC67FC23AB17F60028C5C1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCC67FB23AB17F60028C5C1 /* Constants.swift */; };
 		DDCC680623AB4BF40028C5C1 /* FCButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCC680523AB4BF40028C5C1 /* FCButton.swift */; };
 		DDCC680823AB51170028C5C1 /* UIView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCC680723AB51170028C5C1 /* UIView+Layout.swift */; };
@@ -76,6 +78,8 @@
 		DD8FC5A923A89FFE00A9B60F /* FontCheckerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FontCheckerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD8FC5AD23A89FFE00A9B60F /* FontCheckerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontCheckerUITests.swift; sourceTree = "<group>"; };
 		DD8FC5AF23A89FFE00A9B60F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DD9FE6CD23B4ADDA00117CFC /* SizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeView.swift; sourceTree = "<group>"; };
+		DD9FE6CF23B4ADE300117CFC /* SizeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeViewModel.swift; sourceTree = "<group>"; };
 		DDCC67FB23AB17F60028C5C1 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		DDCC680523AB4BF40028C5C1 /* FCButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FCButton.swift; sourceTree = "<group>"; };
 		DDCC680723AB51170028C5C1 /* UIView+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Layout.swift"; sourceTree = "<group>"; };
@@ -115,6 +119,7 @@
 				DD22449C23AC86950007065A /* SettingView.swift */,
 				DD83EE7323B0A6FF00972145 /* Font */,
 				DD83EE7423B0A70800972145 /* Color */,
+				DD9FE6CC23B4ADC000117CFC /* Size */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -191,10 +196,10 @@
 		DD8FC5BB23A8A59400A9B60F /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				DDCC67FF23AB3EFC0028C5C1 /* Commons */,
 				DD8FC58F23A89FFD00A9B60F /* ViewController.swift */,
 				DD5CCB5423A9E80B00250A17 /* ViewModel.swift */,
 				DD22449B23AC86330007065A /* Components */,
-				DDCC67FF23AB3EFC0028C5C1 /* Commons */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -226,6 +231,15 @@
 				DD8FC58D23A89FFD00A9B60F /* SceneDelegate.swift */,
 			);
 			path = Source;
+			sourceTree = "<group>";
+		};
+		DD9FE6CC23B4ADC000117CFC /* Size */ = {
+			isa = PBXGroup;
+			children = (
+				DD9FE6CD23B4ADDA00117CFC /* SizeView.swift */,
+				DD9FE6CF23B4ADE300117CFC /* SizeViewModel.swift */,
+			);
+			path = Size;
 			sourceTree = "<group>";
 		};
 		DDCC67FA23AB17DB0028C5C1 /* Constants */ = {
@@ -533,9 +547,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				DDCC680823AB51170028C5C1 /* UIView+Layout.swift in Sources */,
+				DD9FE6D023B4ADE300117CFC /* SizeViewModel.swift in Sources */,
 				DD83EE7223B0A6DD00972145 /* ColorViewModel.swift in Sources */,
 				DD5CCB5523A9E80B00250A17 /* ViewModel.swift in Sources */,
 				DD22449D23AC86950007065A /* SettingView.swift in Sources */,
+				DD9FE6CE23B4ADDA00117CFC /* SizeView.swift in Sources */,
 				DD8FC59023A89FFD00A9B60F /* ViewController.swift in Sources */,
 				DD83EE7023B0A67900972145 /* FontViewModel.swift in Sources */,
 				DD5CCB5323A9E1AE00250A17 /* FontView.swift in Sources */,

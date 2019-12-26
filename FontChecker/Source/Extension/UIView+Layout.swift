@@ -32,14 +32,14 @@ extension UIView {
         guard let first = subviews.first else { return }
         first.snp.makeConstraints {
             $0.trailing.leading.equalToSuperview().inset(margin)
-            $0.height.equalToSuperview().dividedBy(subviews.count)
+            $0.height.equalToSuperview().dividedBy(CGFloat(subviews.count) + ratio)
             $0.bottom.equalToSuperview()
         }
 
         for index in 1..<subviews.count {
             subviews[index].snp.makeConstraints {
                 $0.trailing.leading.equalToSuperview().inset(margin)
-                $0.height.equalToSuperview().dividedBy(subviews.count)
+                $0.height.equalToSuperview().dividedBy(CGFloat(subviews.count) + ratio)
                 $0.bottom.equalTo(subviews[index-1].snp.top)
             }
         }

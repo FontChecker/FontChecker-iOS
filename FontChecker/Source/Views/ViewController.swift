@@ -17,6 +17,7 @@ protocol ViewBindable {
     var fontViewModel: FontViewBindable { get }
     var bgColorViewModel: ColorViewBindable { get }
     var textColorViewModel: ColorViewBindable { get }
+    var sizeViewModel: SizeViewBindable { get }
     var attributes: PublishRelay<[NSAttributedString.Key: Any]> { get }
 }
 
@@ -33,11 +34,13 @@ class ViewController: UIViewController {
     let fontView = FontView()
     let bgColorView = ColorView()
     let textColorView = ColorView()
+    let sizeView = SizeView()
 
     var attributes = [NSAttributedString.Key: Any]()
     let buttonHeight: CGFloat = 60
+    let colorViewHeight: CGFloat = 180
+    let sizeViewHeight: CGFloat = 130
     let bottomMargin: CGFloat = 30
-    let bgColorHeight: CGFloat = 180
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,6 +54,7 @@ class ViewController: UIViewController {
                 self.fontView.bind(viewModel.fontViewModel)
                 self.bgColorView.bind(viewModel.bgColorViewModel)
                 self.textColorView.bind(viewModel.textColorViewModel)
+                self.sizeView.bind(viewModel.sizeViewModel)
             })
             .disposed(by: disposeBag)
 
@@ -58,9 +62,11 @@ class ViewController: UIViewController {
             fontButton.rx.controlEvent(.touchUpInside).asObservable()
                 .map { _ -> (UIView, CGFloat) in (self.fontView, self.buttonHeight) },
             bgColorButton.rx.controlEvent(.touchUpInside).asObservable()
-                .map { _ -> (UIView, CGFloat) in (self.bgColorView, self.bgColorHeight) },
+                .map { _ -> (UIView, CGFloat) in (self.bgColorView, self.colorViewHeight) },
             textColorButton.rx.controlEvent(.touchUpInside).asObservable()
-                .map { _ -> (UIView, CGFloat) in (self.textColorView, self.bgColorHeight) })
+                .map { _ -> (UIView, CGFloat) in (self.textColorView, self.colorViewHeight) },
+            sizeButton.rx.controlEvent(.touchUpInside).asObservable()
+                .map { _ -> (UIView, CGFloat) in (self.sizeView, self.sizeViewHeight) })
             .subscribe(onNext: { (subview, height) in
                 self.navigationItem.leftBarButtonItem = self.doneButton
                 self.navigationItem.rightBarButtonItem = self.cancleButton
