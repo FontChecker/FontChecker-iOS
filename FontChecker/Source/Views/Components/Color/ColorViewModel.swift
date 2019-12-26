@@ -10,10 +10,10 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-struct BgColorViewModel: BgColorViewBindable {
+struct ColorViewModel: ColorViewBindable {
     let disposeBag = DisposeBag()
-    
-    let bgColorData = PublishRelay<UIColor>()
-    
+
+    let colorData = PublishRelay<UIColor>()
+
     init() { }
 }

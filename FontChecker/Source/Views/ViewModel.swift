@@ -12,12 +12,26 @@ import RxCocoa
 
 struct ViewModel: ViewBindable {
     let disposeBag = DisposeBag()
-    
+
     let fontViewModel: FontViewBindable
-    let bgColorViewModel: BgColorViewBindable
+    let bgColorViewModel: ColorViewBindable
+    let textColorViewModel: ColorViewBindable
+
+    var attributes = PublishRelay<[NSAttributedString.Key: Any]>()
 
     init() {
         self.fontViewModel = FontViewModel()
-        self.bgColorViewModel = BgColorViewModel()
+        self.bgColorViewModel = ColorViewModel()
+        self.textColorViewModel = ColorViewModel()
+
+        Observable.merge(
+            fontViewModel.fontData.asObservable()
+                .map{ [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15, weight: $0)] },
+            bgColorViewModel.colorData.asObservable()
+                .map{ [NSAttributedString.Key.backgroundColor: $0] },
+            textColorViewModel.colorData.asObservable()
+                .map{ [NSAttributedString.Key.foregroundColor: $0] })
+            .bind(to: attributes)
+            .disposed(by: disposeBag)
     }
 }

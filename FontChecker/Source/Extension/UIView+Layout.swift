@@ -9,7 +9,7 @@
 import UIKit
 
 extension UIView {
-    func addEqaulRatioSubviews(_ subviews: [UIView], ratio: CGFloat = 0.0, margin: CGFloat = 0.0) {
+    func addHorizentalSubviews(_ subviews: [UIView], ratio: CGFloat = 0.0, margin: CGFloat = 0.0) {
         _ = subviews.map { self.addSubview($0) }
 
         guard let first = subviews.first else { return }
@@ -22,6 +22,25 @@ extension UIView {
             subviews[index].snp.makeConstraints {
                 $0.width.equalToSuperview().dividedBy(CGFloat(subviews.count) + ratio)
                 $0.leading.equalTo(subviews[index-1].snp.trailing).offset(margin)
+            }
+        }
+    }
+
+    func addVerticalSubviews(_ subviews: [UIView], ratio: CGFloat = 0.0, margin: CGFloat = 0.0) {
+        _ = subviews.map { self.addSubview($0) }
+
+        guard let first = subviews.first else { return }
+        first.snp.makeConstraints {
+            $0.trailing.leading.equalToSuperview().inset(margin)
+            $0.height.equalToSuperview().dividedBy(subviews.count)
+            $0.bottom.equalToSuperview()
+        }
+
+        for index in 1..<subviews.count {
+            subviews[index].snp.makeConstraints {
+                $0.trailing.leading.equalToSuperview().inset(margin)
+                $0.height.equalToSuperview().dividedBy(subviews.count)
+                $0.bottom.equalTo(subviews[index-1].snp.top)
             }
         }
     }

@@ -9,12 +9,15 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import RxAppState
 import Then
 import SnapKit
 
 protocol ViewBindable {
     var fontViewModel: FontViewBindable { get }
-    var bgColorViewModel: BgColorViewBindable { get }
+    var bgColorViewModel: ColorViewBindable { get }
+    var textColorViewModel: ColorViewBindable { get }
+    var attributes: PublishRelay<[NSAttributedString.Key: Any]> { get }
 }
 
 class ViewController: UIViewController {
@@ -27,9 +30,14 @@ class ViewController: UIViewController {
     let textView = UITextView()
     let doneButton = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: nil)
     let cancleButton = UIBarButtonItem.init(barButtonSystemItem: .cancel, target: self, action: nil)
+    let fontView = FontView()
+    let bgColorView = ColorView()
+    let textColorView = ColorView()
 
+    var attributes = [NSAttributedString.Key: Any]()
     let buttonHeight: CGFloat = 60
     let bottomMargin: CGFloat = 30
+    let bgColorHeight: CGFloat = 180
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,52 +46,51 @@ class ViewController: UIViewController {
     }
 
     func bind(_ viewModel: ViewBindable) {
-        let fontButtonDidTap = fontButton.rx.controlEvent(.touchUpInside)
-            .map { _ -> UIView in
-                let view = FontView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.buttonHeight))
-                view.bind(viewModel.fontViewModel)
-                return view
-            }
-
-        let bgColorButtonDidTap = bgColorButton.rx.controlEvent(.touchUpInside)
-            .map { _ -> UIView in
-                let view = BgColorView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 100))
-                view.bind(viewModel.bgColorViewModel)
-                return view
-            }
+        self.rx.viewWillAppear
+            .subscribe(onNext: { _ in
+                self.fontView.bind(viewModel.fontViewModel)
+                self.bgColorView.bind(viewModel.bgColorViewModel)
+                self.textColorView.bind(viewModel.textColorViewModel)
+            })
+            .disposed(by: disposeBag)
 
         Observable.merge(
-            fontButtonDidTap.asObservable(),
-            bgColorButtonDidTap.asObservable()
-        )
-            .subscribe(onNext: { subview in
+            fontButton.rx.controlEvent(.touchUpInside).asObservable()
+                .map { _ -> (UIView, CGFloat) in (self.fontView, self.buttonHeight) },
+            bgColorButton.rx.controlEvent(.touchUpInside).asObservable()
+                .map { _ -> (UIView, CGFloat) in (self.bgColorView, self.bgColorHeight) },
+            textColorButton.rx.controlEvent(.touchUpInside).asObservable()
+                .map { _ -> (UIView, CGFloat) in (self.textColorView, self.bgColorHeight) })
+            .subscribe(onNext: { (subview, height) in
                 self.navigationItem.leftBarButtonItem = self.doneButton
                 self.navigationItem.rightBarButtonItem = self.cancleButton
-
                 self.view.addSubview(subview)
                 subview.snp.makeConstraints {
                     $0.leading.trailing.equalToSuperview()
                     $0.bottom.equalTo(self.fontButton.snp.bottom)
-                    $0.height.equalTo(subview.frame.height)
+                    $0.height.equalTo(height)
                 }
             })
             .disposed(by: disposeBag)
 
-        Observable.merge(
-            doneButton.rx.tap.asObservable(),
-            cancleButton.rx.tap.asObservable()
-        )
+        viewModel.attributes
             .subscribe(onNext: {
-                self.navigationItem.leftBarButtonItem = nil
-                self.navigationItem.rightBarButtonItem = nil
-                guard let fcView = self.view.subviews.last else { return }
-                fcView.removeFromSuperview()
+                self.attributes.updateValue($0.values.first!, forKey: $0.keys.first!)
+                self.textView.attributedText = NSMutableAttributedString(string: self.textView.text, attributes: self.attributes)
             })
             .disposed(by: disposeBag)
 
-        viewModel.fontViewModel.fontData.asObservable()
+        textView.rx.didChange
+            .subscribe { _ in self.textView.attributedText = NSMutableAttributedString(string: self.textView.text, attributes: self.attributes) }
+            .disposed(by: disposeBag)
+
+        Observable.merge(
+            doneButton.rx.tap.asObservable(),
+            cancleButton.rx.tap.asObservable())
             .subscribe(onNext: {
-                self.textView.font = UIFont.systemFont(ofSize: 15, weight: $0)
+                self.navigationItem.leftBarButtonItem = nil
+                self.navigationItem.rightBarButtonItem = nil
+                self.view.subviews.last?.removeFromSuperview()
             })
             .disposed(by: disposeBag)
     }
@@ -105,7 +112,7 @@ class ViewController: UIViewController {
 
     func layout() {
         view.addSubview(textView)
-        view.addEqaulRatioSubviews([fontButton, bgColorButton, textColorButton, sizeButton])
+        view.addHorizentalSubviews([fontButton, bgColorButton, textColorButton, sizeButton])
 
         _ = [fontButton, bgColorButton, textColorButton, sizeButton].map {
             $0.snp.makeConstraints {

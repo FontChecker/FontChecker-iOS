@@ -43,7 +43,7 @@ class FontView: SettingView<FontViewBindable> {
     }
 
     override func layout() {
-        self.addEqaulRatioSubviews([lightButton, regularButton, boldButton], ratio: 0.5, margin: 15)
+        self.addHorizentalSubviews([lightButton, regularButton, boldButton], ratio: 0.5, margin: 15)
 
         _ = [lightButton, regularButton, boldButton].map {
             $0.snp.makeConstraints {
