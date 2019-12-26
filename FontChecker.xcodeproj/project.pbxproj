@@ -11,12 +11,12 @@
 		8495B913B9145AEF8C6CF52A /* Pods_FontChecker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48C870633EC1BF43C3787B28 /* Pods_FontChecker.framework */; };
 		CF253C6A27F5857B9D8E3987 /* Pods_FontCheckerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB7C7C524480CD47CFAA9FF0 /* Pods_FontCheckerTests.framework */; };
 		DD22449D23AC86950007065A /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD22449C23AC86950007065A /* SettingView.swift */; };
-		DD22449F23AC88920007065A /* BgColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD22449E23AC88920007065A /* BgColorView.swift */; };
+		DD22449F23AC88920007065A /* ColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD22449E23AC88920007065A /* ColorView.swift */; };
 		DD5CCB5323A9E1AE00250A17 /* FontView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD5CCB5223A9E1AE00250A17 /* FontView.swift */; };
 		DD5CCB5523A9E80B00250A17 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD5CCB5423A9E80B00250A17 /* ViewModel.swift */; };
 		DD6881CD23A9BA6900941FDE /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = DD6881CC23A9BA6900941FDE /* .swiftlint.yml */; };
 		DD83EE7023B0A67900972145 /* FontViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD83EE6F23B0A67900972145 /* FontViewModel.swift */; };
-		DD83EE7223B0A6DD00972145 /* BgColorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD83EE7123B0A6DD00972145 /* BgColorViewModel.swift */; };
+		DD83EE7223B0A6DD00972145 /* ColorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD83EE7123B0A6DD00972145 /* ColorViewModel.swift */; };
 		DD8FC58C23A89FFD00A9B60F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8FC58B23A89FFD00A9B60F /* AppDelegate.swift */; };
 		DD8FC58E23A89FFD00A9B60F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8FC58D23A89FFD00A9B60F /* SceneDelegate.swift */; };
 		DD8FC59023A89FFD00A9B60F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8FC58F23A89FFD00A9B60F /* ViewController.swift */; };
@@ -57,12 +57,12 @@
 		BB7C7C524480CD47CFAA9FF0 /* Pods_FontCheckerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FontCheckerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1E5154C9AA2C55E57D0C8AC /* Pods-FontCheckerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FontCheckerTests.release.xcconfig"; path = "Target Support Files/Pods-FontCheckerTests/Pods-FontCheckerTests.release.xcconfig"; sourceTree = "<group>"; };
 		DD22449C23AC86950007065A /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
-		DD22449E23AC88920007065A /* BgColorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BgColorView.swift; sourceTree = "<group>"; };
+		DD22449E23AC88920007065A /* ColorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorView.swift; sourceTree = "<group>"; };
 		DD5CCB5223A9E1AE00250A17 /* FontView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontView.swift; sourceTree = "<group>"; };
 		DD5CCB5423A9E80B00250A17 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		DD6881CC23A9BA6900941FDE /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		DD83EE6F23B0A67900972145 /* FontViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontViewModel.swift; sourceTree = "<group>"; };
-		DD83EE7123B0A6DD00972145 /* BgColorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BgColorViewModel.swift; sourceTree = "<group>"; };
+		DD83EE7123B0A6DD00972145 /* ColorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorViewModel.swift; sourceTree = "<group>"; };
 		DD8FC58823A89FFD00A9B60F /* FontChecker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FontChecker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD8FC58B23A89FFD00A9B60F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DD8FC58D23A89FFD00A9B60F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -114,7 +114,7 @@
 			children = (
 				DD22449C23AC86950007065A /* SettingView.swift */,
 				DD83EE7323B0A6FF00972145 /* Font */,
-				DD83EE7423B0A70800972145 /* BgColor */,
+				DD83EE7423B0A70800972145 /* Color */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -128,13 +128,13 @@
 			path = Font;
 			sourceTree = "<group>";
 		};
-		DD83EE7423B0A70800972145 /* BgColor */ = {
+		DD83EE7423B0A70800972145 /* Color */ = {
 			isa = PBXGroup;
 			children = (
-				DD22449E23AC88920007065A /* BgColorView.swift */,
-				DD83EE7123B0A6DD00972145 /* BgColorViewModel.swift */,
+				DD22449E23AC88920007065A /* ColorView.swift */,
+				DD83EE7123B0A6DD00972145 /* ColorViewModel.swift */,
 			);
-			path = BgColor;
+			path = Color;
 			sourceTree = "<group>";
 		};
 		DD8FC57F23A89FFD00A9B60F = {
@@ -533,7 +533,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DDCC680823AB51170028C5C1 /* UIView+Layout.swift in Sources */,
-				DD83EE7223B0A6DD00972145 /* BgColorViewModel.swift in Sources */,
+				DD83EE7223B0A6DD00972145 /* ColorViewModel.swift in Sources */,
 				DD5CCB5523A9E80B00250A17 /* ViewModel.swift in Sources */,
 				DD22449D23AC86950007065A /* SettingView.swift in Sources */,
 				DD8FC59023A89FFD00A9B60F /* ViewController.swift in Sources */,
@@ -543,7 +543,7 @@
 				DD8FC58E23A89FFD00A9B60F /* SceneDelegate.swift in Sources */,
 				DDCC680623AB4BF40028C5C1 /* FCButton.swift in Sources */,
 				DDCC67FC23AB17F60028C5C1 /* Constants.swift in Sources */,
-				DD22449F23AC88920007065A /* BgColorView.swift in Sources */,
+				DD22449F23AC88920007065A /* ColorView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

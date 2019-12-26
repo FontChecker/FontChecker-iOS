@@ -25,7 +25,7 @@ extension UIView {
             }
         }
     }
-    
+
     func addVerticalSubviews(_ subviews: [UIView], ratio: CGFloat = 0.0, margin: CGFloat = 0.0) {
         _ = subviews.map { self.addSubview($0) }
 

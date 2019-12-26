@@ -9,7 +9,8 @@ target 'FontChecker' do
   # RxSwift + Dependencies
   pod 'RxSwift', '~> 5'
   pod 'RxCocoa', '~> 5'
-  pod 'RxOptional', '~> 4.1.0'    # optional을 걸러주는 기능
+  pod 'RxOptional', '~> 4.1.0'
+  pod "RxAppState"
   
   # UI (Autolayout, Image, Animation, Label)
   pod 'SnapKit', '~> 5.0.1'

@@ -11,11 +11,11 @@ import RxSwift
 import RxCocoa
 import RxOptional
 
-protocol BgColorViewBindable {
-    var bgColorData: PublishRelay<UIColor> { get }
+protocol ColorViewBindable {
+    var colorData: PublishRelay<UIColor> { get }
 }
 
-class BgColorView: SettingView<BgColorViewBindable> {
+class ColorView: SettingView<ColorViewBindable> {
     let redSlider = UISlider()
     let greenSlider = UISlider()
     let blueSlider = UISlider()
@@ -23,7 +23,7 @@ class BgColorView: SettingView<BgColorViewBindable> {
     let greenTextField = UITextField()
     let blueTextField = UITextField()
 
-    override func bind(_ viewModel: BgColorViewBindable) {
+    override func bind(_ viewModel: ColorViewBindable) {
         self.disposeBag = DisposeBag()
 
         let sliderValueChange = Observable.merge(
@@ -59,7 +59,7 @@ class BgColorView: SettingView<BgColorViewBindable> {
             }
 
         Observable.merge(sliderValueChange, textValueChange)
-            .bind(to: viewModel.bgColorData)
+            .bind(to: viewModel.colorData)
             .disposed(by: disposeBag)
     }
 
