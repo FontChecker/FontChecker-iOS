@@ -24,18 +24,13 @@ struct ViewModel: ViewBindable {
         self.bgColorViewModel = ColorViewModel()
         self.textColorViewModel = ColorViewModel()
 
-        fontViewModel.fontData.asObservable()
-            .map{ [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15, weight: $0)] }
-            .bind(to: attributes)
-            .disposed(by: disposeBag)
-
-        bgColorViewModel.colorData.asObservable()
-            .map{ [NSAttributedString.Key.backgroundColor: $0] }
-            .bind(to: attributes)
-            .disposed(by: disposeBag)
-
-        textColorViewModel.colorData.asObservable()
-            .map{ [NSAttributedString.Key.foregroundColor: $0] }
+        Observable.merge(
+            fontViewModel.fontData.asObservable()
+                .map{ [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15, weight: $0)] },
+            bgColorViewModel.colorData.asObservable()
+                .map{ [NSAttributedString.Key.backgroundColor: $0] },
+            textColorViewModel.colorData.asObservable()
+                .map{ [NSAttributedString.Key.foregroundColor: $0] })
             .bind(to: attributes)
             .disposed(by: disposeBag)
     }

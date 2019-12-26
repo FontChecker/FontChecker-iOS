@@ -60,8 +60,7 @@ class ViewController: UIViewController {
             bgColorButton.rx.controlEvent(.touchUpInside).asObservable()
                 .map { _ -> (UIView, CGFloat) in (self.bgColorView, self.bgColorHeight) },
             textColorButton.rx.controlEvent(.touchUpInside).asObservable()
-                .map { _ -> (UIView, CGFloat) in (self.textColorView, self.bgColorHeight) }
-        )
+                .map { _ -> (UIView, CGFloat) in (self.textColorView, self.bgColorHeight) })
             .subscribe(onNext: { (subview, height) in
                 self.navigationItem.leftBarButtonItem = self.doneButton
                 self.navigationItem.rightBarButtonItem = self.cancleButton
@@ -87,8 +86,7 @@ class ViewController: UIViewController {
 
         Observable.merge(
             doneButton.rx.tap.asObservable(),
-            cancleButton.rx.tap.asObservable()
-        )
+            cancleButton.rx.tap.asObservable())
             .subscribe(onNext: {
                 self.navigationItem.leftBarButtonItem = nil
                 self.navigationItem.rightBarButtonItem = nil

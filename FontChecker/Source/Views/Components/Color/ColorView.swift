@@ -29,34 +29,26 @@ class ColorView: SettingView<ColorViewBindable> {
         let sliderValueChange = Observable.merge(
             redSlider.rx.controlEvent(.valueChanged).asObservable(),
             greenSlider.rx.controlEvent(.valueChanged).asObservable(),
-            blueSlider.rx.controlEvent(.valueChanged).asObservable()
-        )
+            blueSlider.rx.controlEvent(.valueChanged).asObservable())
             .map { _ -> UIColor in
                 self.redTextField.text = "\(self.redSlider.value)"
                 self.greenTextField.text = "\(self.greenSlider.value)"
                 self.blueTextField.text = "\(self.blueSlider.value)"
                 return UIColor(displayP3Red: CGFloat(self.redSlider.value/255), green: CGFloat(self.greenSlider.value/255), blue: CGFloat(self.blueSlider.value/255), alpha: 1)
-            }
+        }
 
         let textValueChange = Observable.merge(
             redTextField.rx.controlEvent(.editingDidEnd).asObservable(),
             greenTextField.rx.controlEvent(.editingDidEnd).asObservable(),
-            blueTextField.rx.controlEvent(.editingDidEnd).asObservable()
-        )
-            .map { _ -> [Float]? in
-                guard let red = Float(self.redTextField.text ?? "0"),
-                    let green = Float(self.greenTextField.text ?? "0"),
-                    let blue = Float(self.blueTextField.text ?? "0")
-                    else { return nil }
-                return [red, green, blue]
-            }
-            .filterNil()
-            .map { color -> UIColor in
-                self.redSlider.value = color[0]
-                self.greenSlider.value = color[1]
-                self.blueSlider.value = color[2]
-                return UIColor(displayP3Red: CGFloat(color[0]/255), green: CGFloat(color[1]/255), blue: CGFloat(color[2]/255), alpha: 1)
-            }
+            blueTextField.rx.controlEvent(.editingDidEnd).asObservable())
+            .map { _ -> UIColor? in
+                guard let red = Float(self.redTextField.text ?? "0"), let green = Float(self.greenTextField.text ?? "0"), let blue = Float(self.blueTextField.text ?? "0") else { return nil }
+                self.redSlider.value = red
+                self.greenSlider.value = green
+                self.blueSlider.value = blue
+                return UIColor(displayP3Red: CGFloat(red/255), green: CGFloat(green/255), blue: CGFloat(blue/255), alpha: 1)
+        }
+        .filterNil()
 
         Observable.merge(sliderValueChange, textValueChange)
             .bind(to: viewModel.colorData)
