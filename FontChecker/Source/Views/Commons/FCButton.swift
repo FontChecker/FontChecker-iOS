@@ -13,9 +13,10 @@ class FCButton: UIButton {
         super.init(frame: frame)
 
         self.do {
-            $0.setTitleColor(.gray, for: .normal)
-            $0.layer.borderWidth = 0.7
-            $0.layer.borderColor = UIColor.gray.cgColor
+            $0.titleLabel?.font = UIFont.systemFont(ofSize: UIConstant.Base.fontSize)
+            $0.setTitleColor(.black, for: .normal)
+            $0.backgroundColor = .white
+            $0.layer.cornerRadius = UIConstant.Setting.buttonRadius
         }
     }
 

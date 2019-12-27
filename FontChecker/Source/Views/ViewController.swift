@@ -24,6 +24,7 @@ protocol ViewBindable {
 class ViewController: UIViewController {
     let disposeBag = DisposeBag()
 
+    let settingView = UIScrollView()
     let fontButton = FCButton()
     let bgColorButton = FCButton()
     let textColorButton = FCButton()
@@ -37,10 +38,6 @@ class ViewController: UIViewController {
     let sizeView = SizeView()
 
     var attributes = [NSAttributedString.Key: Any]()
-    let buttonHeight: CGFloat = 60
-    let colorViewHeight: CGFloat = 180
-    let sizeViewHeight: CGFloat = 130
-    let bottomMargin: CGFloat = 30
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,13 +57,13 @@ class ViewController: UIViewController {
 
         Observable.merge(
             fontButton.rx.controlEvent(.touchUpInside).asObservable()
-                .map { _ -> (UIView, CGFloat) in (self.fontView, self.buttonHeight) },
+                .map { _ -> (UIView, CGFloat) in (self.fontView, UIConstant.Setting.fontViewHeight) },
             bgColorButton.rx.controlEvent(.touchUpInside).asObservable()
-                .map { _ -> (UIView, CGFloat) in (self.bgColorView, self.colorViewHeight) },
+                .map { _ -> (UIView, CGFloat) in (self.bgColorView, UIConstant.Setting.colorViewHeight) },
             textColorButton.rx.controlEvent(.touchUpInside).asObservable()
-                .map { _ -> (UIView, CGFloat) in (self.textColorView, self.colorViewHeight) },
+                .map { _ -> (UIView, CGFloat) in (self.textColorView, UIConstant.Setting.colorViewHeight) },
             sizeButton.rx.controlEvent(.touchUpInside).asObservable()
-                .map { _ -> (UIView, CGFloat) in (self.sizeView, self.sizeViewHeight) })
+                .map { _ -> (UIView, CGFloat) in (self.sizeView, UIConstant.Setting.sizeViewHeight) })
             .subscribe(onNext: { (subview, height) in
                 self.navigationItem.leftBarButtonItem = self.doneButton
                 self.navigationItem.rightBarButtonItem = self.cancleButton
@@ -90,9 +87,7 @@ class ViewController: UIViewController {
             .subscribe { _ in self.textView.attributedText = NSMutableAttributedString(string: self.textView.text, attributes: self.attributes) }
             .disposed(by: disposeBag)
 
-        Observable.merge(
-            doneButton.rx.tap.asObservable(),
-            cancleButton.rx.tap.asObservable())
+        Observable.merge(doneButton.rx.tap.asObservable(), cancleButton.rx.tap.asObservable())
             .subscribe(onNext: {
                 self.navigationItem.leftBarButtonItem = nil
                 self.navigationItem.rightBarButtonItem = nil
@@ -107,7 +102,12 @@ class ViewController: UIViewController {
 
         textView.do {
             $0.backgroundColor = .white
-            $0.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+            $0.font = UIFont.systemFont(ofSize: UIConstant.Base.fontSize, weight: UIConstant.Base.fontWeight)
+        }
+
+        settingView.do {
+            $0.backgroundColor = .lightGray
+            $0.showsHorizontalScrollIndicator = false
         }
 
         fontButton.setTitle("폰트 변경", for: .normal)
@@ -118,12 +118,19 @@ class ViewController: UIViewController {
 
     func layout() {
         view.addSubview(textView)
-        view.addHorizentalSubviews([fontButton, bgColorButton, textColorButton, sizeButton])
+        settingView.addHorizentalSubviews([fontButton, bgColorButton, textColorButton, sizeButton], ratio: UIConstant.Setting.leftRatio, margin: UIConstant.Setting.leftMargin)
+        settingView.contentSize = CGSize(width: view.frame.width + (UIConstant.Setting.leftMargin * CGFloat(settingView.subviews.count)), height: settingView.bounds.height)
+        view.addSubview(settingView)
+
+        settingView.snp.makeConstraints {
+            $0.trailing.leading.bottom.equalToSuperview()
+            $0.height.equalTo(UIConstant.Setting.height)
+        }
 
         _ = [fontButton, bgColorButton, textColorButton, sizeButton].map {
             $0.snp.makeConstraints {
-                $0.height.equalTo(buttonHeight)
-                $0.bottom.equalToSuperview().inset(bottomMargin)
+                $0.height.equalTo(UIConstant.Setting.fontViewHeight)
+                $0.top.equalToSuperview().inset(UIConstant.Setting.topMargin)
             }
         }
 

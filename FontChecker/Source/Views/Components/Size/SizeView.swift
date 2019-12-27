@@ -40,28 +40,28 @@ class SizeView: SettingView<SizeViewBindable> {
     }
 
     override func attribute() {
-        self.backgroundColor = .white
+        self.backgroundColor = UIConstant.Setting.backgroundColor
 
         sizeSlider.do {
             $0.minimumValue = 0
             $0.maximumValue = 100
-            $0.value = 15
-            $0.maximumTrackTintColor = .lightGray
+            $0.value = Float(UIConstant.Base.fontSize)
+            $0.maximumTrackTintColor = .white
         }
 
         sizeTextField.do {
-            $0.font = UIFont.systemFont(ofSize: 16, weight: .bold)
-            $0.layer.cornerRadius = 10
+            $0.font = UIFont.systemFont(ofSize: UIConstant.Base.fontSize, weight: .bold)
+            $0.layer.cornerRadius = UIConstant.Setting.textFieldRadius
             $0.textColor = .white
             $0.textAlignment = .center
             $0.keyboardType = .numberPad
             $0.text = "\(self.sizeSlider.value)"
-            $0.backgroundColor = .blue
+            $0.backgroundColor = UIColor(displayP3Red: (11/255), green: (95/255), blue: (254/255), alpha: 1)
         }
     }
 
     override func layout() {
-        self.addVerticalSubviews([sizeSlider, sizeTextField], ratio: 0.8, margin: 20)
+        self.addVerticalSubviews([sizeSlider, sizeTextField], ratio: UIConstant.Setting.bottomRatio, margin: UIConstant.Setting.bottomMargin)
 
         sizeTextField.snp.makeConstraints {
             $0.width.equalToSuperview().dividedBy(4)

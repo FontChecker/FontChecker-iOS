@@ -27,8 +27,8 @@ struct ViewModel: ViewBindable {
         self.sizeViewModel = SizeViewModel()
 
         let fontChange = Observable.combineLatest(
-            fontViewModel.fontData.asObservable().startWith(UIFont.Weight.medium),
-            sizeViewModel.sizeData.asObservable().startWith(15))
+            fontViewModel.fontData.asObservable().startWith(UIConstant.Base.fontWeight),
+            sizeViewModel.sizeData.asObservable().startWith(UIConstant.Base.fontSize))
             .map { (weight, size) -> [NSAttributedString.Key: Any] in
                 return [NSAttributedString.Key.font: UIFont.systemFont(ofSize: size, weight: weight)]
         }
