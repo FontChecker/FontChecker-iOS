@@ -31,7 +31,7 @@ public struct UIConstant {
         static let textFieldRadius: CGFloat = 10
         static let buttonRadius: CGFloat = 15
     }
-    
+
     struct Color {
         static let red: UIColor = UIColor(displayP3Red: (238/255), green: (64/255), blue: (65/255), alpha: 1)
         static let green: UIColor = UIColor(displayP3Red: (48/255), green: (191/255), blue: (71/255), alpha: 1)

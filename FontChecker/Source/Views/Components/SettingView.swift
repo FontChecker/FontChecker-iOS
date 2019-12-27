@@ -1,5 +1,5 @@
 //
-//  View.swift
+//  SettingView.swift
 //  FontChecker
 //
 //  Created by 김효원 on 20/12/2019.
