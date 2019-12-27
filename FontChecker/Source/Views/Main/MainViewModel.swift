@@ -1,5 +1,5 @@
 //
-//  FontModel.swift
+//  MainViewModel.swift
 //  FontChecker
 //
 //  Created by 김효원 on 18/12/2019.
@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-struct ViewModel: ViewBindable {
+struct MainViewModel: MainViewBindable {
     let disposeBag = DisposeBag()
 
     let fontViewModel: FontViewBindable
@@ -31,14 +31,12 @@ struct ViewModel: ViewBindable {
             sizeViewModel.sizeData.asObservable().startWith(UIConstant.Base.fontSize))
             .map { (weight, size) -> [NSAttributedString.Key: Any] in
                 return [NSAttributedString.Key.font: UIFont.systemFont(ofSize: size, weight: weight)]
-        }
+            }
 
         Observable.merge(
             fontChange,
-            bgColorViewModel.colorData.asObservable()
-                .map{ [NSAttributedString.Key.backgroundColor: $0] },
-            textColorViewModel.colorData.asObservable()
-                .map{ [NSAttributedString.Key.foregroundColor: $0] })
+            bgColorViewModel.colorData.asObservable().map{ [NSAttributedString.Key.backgroundColor: $0] },
+            textColorViewModel.colorData.asObservable().map{ [NSAttributedString.Key.foregroundColor: $0] })
             .bind(to: attributes)
             .disposed(by: disposeBag)
     }

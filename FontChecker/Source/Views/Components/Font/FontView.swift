@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  FontView.swift
 //  FontChecker
 //
 //  Created by 김효원 on 18/12/2019.
