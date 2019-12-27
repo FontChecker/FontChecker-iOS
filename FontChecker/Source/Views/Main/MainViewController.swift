@@ -37,7 +37,7 @@ class MainViewController: ViewController<MainViewBindable> {
 
     var attributes = [NSAttributedString.Key: Any]()
     var tempAttributeText: NSAttributedString = NSAttributedString(string: "")
-
+    
     override func bind(_ viewModel: MainViewBindable) {
         self.disposeBag = DisposeBag()
 

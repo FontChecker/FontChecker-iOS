@@ -1,5 +1,5 @@
 //
-//  BgColorViewModel.swift
+//  ColorViewModel.swift
 //  FontChecker
 //
 //  Created by 김효원 on 23/12/2019.
