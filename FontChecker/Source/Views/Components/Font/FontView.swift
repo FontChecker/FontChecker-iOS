@@ -35,7 +35,7 @@ class FontView: SettingView<FontViewBindable> {
     }
 
     override func attribute() {
-        self.backgroundColor = .white
+        self.backgroundColor = UIConstant.Setting.backgroundColor
 
         lightButton.setTitle("light", for: .normal)
         regularButton.setTitle("regular", for: .normal)
@@ -43,7 +43,7 @@ class FontView: SettingView<FontViewBindable> {
     }
 
     override func layout() {
-        self.addHorizentalSubviews([lightButton, regularButton, boldButton], ratio: 0.5, margin: 15)
+        self.addHorizentalSubviews([lightButton, regularButton, boldButton], ratio: UIConstant.Setting.leftRatio, margin: UIConstant.Setting.leftMargin)
 
         _ = [lightButton, regularButton, boldButton].map {
             $0.snp.makeConstraints {

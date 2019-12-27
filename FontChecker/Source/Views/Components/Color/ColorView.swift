@@ -56,21 +56,21 @@ class ColorView: SettingView<ColorViewBindable> {
     }
 
     override func attribute() {
-        self.backgroundColor = .white
+        self.backgroundColor = UIConstant.Setting.backgroundColor
 
         _ = [redSlider, greenSlider, blueSlider].map {
             $0.minimumValue = 0
             $0.maximumValue = 255
             $0.value = 127.5
-            $0.maximumTrackTintColor = .lightGray
+            $0.maximumTrackTintColor = .white
         }
-        redSlider.minimumTrackTintColor = .systemRed
-        greenSlider.minimumTrackTintColor = .systemGreen
-        blueSlider.minimumTrackTintColor = .systemBlue
+        redSlider.minimumTrackTintColor = UIConstant.Color.red
+        greenSlider.minimumTrackTintColor = UIConstant.Color.green
+        blueSlider.minimumTrackTintColor = UIConstant.Color.blue
 
         _ = [redTextField, greenTextField, blueTextField].map {
-            $0.font = UIFont.systemFont(ofSize: 16, weight: .bold)
-            $0.layer.cornerRadius = 10
+            $0.font = UIFont.systemFont(ofSize: UIConstant.Base.fontSize, weight: .bold)
+            $0.layer.cornerRadius = UIConstant.Setting.textFieldRadius
             $0.textColor = .white
             $0.textAlignment = .center
             $0.keyboardType = .numberPad
@@ -78,24 +78,27 @@ class ColorView: SettingView<ColorViewBindable> {
 
         redTextField.do {
             $0.text = "\(self.redSlider.value)"
-            $0.backgroundColor = .systemRed
+            $0.backgroundColor = UIConstant.Color.red
         }
 
         greenTextField.do {
             $0.text = "\(self.greenSlider.value)"
-            $0.backgroundColor = .systemGreen
+            $0.backgroundColor = UIConstant.Color.green
         }
 
         blueTextField.do {
             $0.text = "\(self.blueSlider.value)"
-            $0.backgroundColor = .systemBlue
+            $0.backgroundColor = UIConstant.Color.blue
         }
     }
 
     override func layout() {
         let colorTextView = UIView()
-        colorTextView.addHorizentalSubviews([redTextField, greenTextField, blueTextField], ratio: 0.5, margin: 15)
+        colorTextView.addHorizentalSubviews([redTextField, greenTextField, blueTextField], ratio: UIConstant.Setting.leftRatio, margin: UIConstant.Setting.leftMargin)
 
-        self.addVerticalSubviews([blueSlider, greenSlider, redSlider, colorTextView], margin: 15)
+        self.addVerticalSubviews([blueSlider, greenSlider, redSlider, colorTextView], margin: UIConstant.Setting.bottomMargin)
+        colorTextView.snp.makeConstraints {
+            $0.top.equalToSuperview().inset(UIConstant.Setting.topMargin)
+        }
     }
 }
