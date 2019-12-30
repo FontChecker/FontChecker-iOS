@@ -17,6 +17,7 @@ class ViewController<Bindable>: UIViewController {
         super.init(nibName: nil, bundle: nil)
 
         initialize()
+        bindUI()
     }
 
     override func viewDidLoad() {
@@ -31,6 +32,8 @@ class ViewController<Bindable>: UIViewController {
     }
 
     func bind(_ viewModel: Bindable) { }
+
+    func bindUI() { }
 
     func attribute() { }
 

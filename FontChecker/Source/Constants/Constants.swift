@@ -38,3 +38,9 @@ public struct UIConstant {
         static let blue: UIColor = UIColor(displayP3Red: (11/255), green: (95/255), blue: (254/255), alpha: 1)
     }
 }
+
+public struct FileConstant {
+    struct Path {
+        static let baseDirName = "FontChecker"
+    }
+}

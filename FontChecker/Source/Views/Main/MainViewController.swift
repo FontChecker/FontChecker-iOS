@@ -27,6 +27,7 @@ class MainViewController: ViewController<MainViewBindable> {
     let bgColorButton = FCButton()
     let textColorButton = FCButton()
     let sizeButton = FCButton()
+    let addFontButton = FCButton()
     let textView = UITextView()
     let doneButton = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: nil)
     let cancleButton = UIBarButtonItem.init(barButtonSystemItem: .cancel, target: self, action: nil)
@@ -37,7 +38,7 @@ class MainViewController: ViewController<MainViewBindable> {
 
     var attributes = [NSAttributedString.Key: Any]()
     var tempAttributeText: NSAttributedString = NSAttributedString(string: "")
-    
+
     override func bind(_ viewModel: MainViewBindable) {
         self.disposeBag = DisposeBag()
 
@@ -47,6 +48,28 @@ class MainViewController: ViewController<MainViewBindable> {
                 self.bgColorView.bind(viewModel.bgColorViewModel)
                 self.textColorView.bind(viewModel.textColorViewModel)
                 self.sizeView.bind(viewModel.sizeViewModel)
+            })
+            .disposed(by: disposeBag)
+
+        viewModel.attributes
+            .subscribe(onNext: {
+                self.attributes.updateValue($0.values.first!, forKey: $0.keys.first!)
+                self.textView.attributedText = NSMutableAttributedString(string: self.textView.text, attributes: self.attributes)
+            })
+            .disposed(by: disposeBag)
+    }
+
+    override func bindUI() {
+        textView.rx.didChange
+            .subscribe { _ in self.textView.attributedText = NSMutableAttributedString(string: self.textView.text, attributes: self.attributes) }
+            .disposed(by: disposeBag)
+
+        Observable.merge( doneButton.rx.tap.asObservable().map { return true }, cancleButton.rx.tap.asObservable().map { return false })
+            .subscribe(onNext: {
+                if !($0) { self.textView.attributedText = self.tempAttributeText }
+                self.navigationItem.leftBarButtonItem = nil
+                self.navigationItem.rightBarButtonItem = nil
+                self.view.subviews.last?.removeFromSuperview()
             })
             .disposed(by: disposeBag)
 
@@ -71,26 +94,6 @@ class MainViewController: ViewController<MainViewBindable> {
                 }
             })
             .disposed(by: disposeBag)
-
-        viewModel.attributes
-            .subscribe(onNext: {
-                self.attributes.updateValue($0.values.first!, forKey: $0.keys.first!)
-                self.textView.attributedText = NSMutableAttributedString(string: self.textView.text, attributes: self.attributes)
-            })
-            .disposed(by: disposeBag)
-
-        textView.rx.didChange
-            .subscribe { _ in self.textView.attributedText = NSMutableAttributedString(string: self.textView.text, attributes: self.attributes) }
-            .disposed(by: disposeBag)
-
-        Observable.merge(doneButton.rx.tap.asObservable().map { return true }, cancleButton.rx.tap.asObservable().map { return false })
-            .subscribe(onNext: {
-                if !($0) { self.textView.attributedText = self.tempAttributeText }
-                self.navigationItem.leftBarButtonItem = nil
-                self.navigationItem.rightBarButtonItem = nil
-                self.view.subviews.last?.removeFromSuperview()
-            })
-            .disposed(by: disposeBag)
     }
 
     override func attribute() {
@@ -111,11 +114,12 @@ class MainViewController: ViewController<MainViewBindable> {
         bgColorButton.setTitle("BG색", for: .normal)
         textColorButton.setTitle("TEXT색", for: .normal)
         sizeButton.setTitle("TEXT크기", for: .normal)
+        addFontButton.setTitle("폰트 추가", for: .normal)
     }
 
     override func layout() {
         view.addSubview(textView)
-        settingView.addHorizentalSubviews([fontButton, bgColorButton, textColorButton, sizeButton], ratio: UIConstant.Setting.leftRatio, margin: UIConstant.Setting.leftMargin)
+        settingView.addHorizentalSubviews([fontButton, bgColorButton, textColorButton, sizeButton, addFontButton], ratio: UIConstant.Setting.leftRatio, margin: UIConstant.Setting.leftMargin)
         settingView.contentSize = CGSize(width: view.frame.width + (UIConstant.Setting.leftMargin * CGFloat(settingView.subviews.count)), height: settingView.bounds.height)
         view.addSubview(settingView)
 
@@ -124,7 +128,7 @@ class MainViewController: ViewController<MainViewBindable> {
             $0.height.equalTo(UIConstant.Setting.height)
         }
 
-        _ = [fontButton, bgColorButton, textColorButton, sizeButton].map {
+        _ = [fontButton, bgColorButton, textColorButton, sizeButton, addFontButton].map {
             $0.snp.makeConstraints {
                 $0.height.equalTo(UIConstant.Setting.fontViewHeight)
                 $0.top.equalToSuperview().inset(UIConstant.Setting.topMargin)
