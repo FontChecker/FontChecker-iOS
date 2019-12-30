@@ -41,7 +41,7 @@ class MainViewController: ViewController<MainViewBindable> {
 
     override func bind(_ viewModel: MainViewBindable) {
         self.disposeBag = DisposeBag()
-
+        
         self.rx.viewWillAppear
             .subscribe(onNext: { _ in
                 self.fontView.bind(viewModel.fontViewModel)
@@ -57,9 +57,11 @@ class MainViewController: ViewController<MainViewBindable> {
                 self.textView.attributedText = NSMutableAttributedString(string: self.textView.text, attributes: self.attributes)
             })
             .disposed(by: disposeBag)
+
+        bindUI()
     }
 
-    override func bindUI() {
+    func bindUI() {
         textView.rx.didChange
             .subscribe { _ in self.textView.attributedText = NSMutableAttributedString(string: self.textView.text, attributes: self.attributes) }
             .disposed(by: disposeBag)
@@ -102,11 +104,11 @@ class MainViewController: ViewController<MainViewBindable> {
 
         textView.do {
             $0.backgroundColor = .white
-            $0.font = UIFont.systemFont(ofSize: UIConstant.Base.fontSize, weight: UIConstant.Base.fontWeight)
+            $0.font = UIConstant.Base.font
         }
 
         settingView.do {
-            $0.backgroundColor = .lightGray
+            $0.backgroundColor = UIConstant.Setting.backgroundColor
             $0.showsHorizontalScrollIndicator = false
         }
 
@@ -130,7 +132,7 @@ class MainViewController: ViewController<MainViewBindable> {
 
         _ = [fontButton, bgColorButton, textColorButton, sizeButton, addFontButton].map {
             $0.snp.makeConstraints {
-                $0.height.equalTo(UIConstant.Setting.fontViewHeight)
+                $0.height.equalTo(UIConstant.Setting.buttonHeight)
                 $0.top.equalToSuperview().inset(UIConstant.Setting.topMargin)
             }
         }

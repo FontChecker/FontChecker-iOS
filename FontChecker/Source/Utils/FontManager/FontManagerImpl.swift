@@ -12,7 +12,7 @@ import RxSwift
 import RxCocoa
 
 class FontManagerImpl: FontManager {
-    let shared = FontManagerImpl()
+    static let shared = FontManagerImpl()
 
     func getFontList() -> [String]{
         var fontNames = [String]()
