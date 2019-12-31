@@ -24,8 +24,8 @@ class FontManagerImpl: FontManager {
 
     func installFont(filePath: String) -> Observable<Result<String, FTError>> {
         guard let fontData = NSData(contentsOfFile: filePath)
-            , let dataProvider = CGDataProvider.init(data: fontData)
-            , let cgFont = CGFont.init(dataProvider) else {
+            ,let dataProvider = CGDataProvider.init(data: fontData)
+            ,let cgFont = CGFont.init(dataProvider) else {
                 let err = FTError.error("폰트 파일 오류입니다.")
                 return .just(.failure(err))
         }

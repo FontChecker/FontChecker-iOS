@@ -41,7 +41,7 @@ class MainViewController: ViewController<MainViewBindable> {
 
     override func bind(_ viewModel: MainViewBindable) {
         self.disposeBag = DisposeBag()
-        
+
         self.rx.viewWillAppear
             .subscribe(onNext: { _ in
                 self.fontView.bind(viewModel.fontViewModel)
