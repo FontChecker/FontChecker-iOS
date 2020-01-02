@@ -11,44 +11,47 @@ import RxSwift
 import RxCocoa
 
 protocol FontViewBindable {
-    var fontData: PublishRelay<UIFont.Weight> { get }
+    var fontData: PublishRelay<String> { get }
 }
 
 class FontView: SettingView<FontViewBindable> {
-    let lightButton = FCButton()
-    let regularButton = FCButton()
-    let boldButton = FCButton()
+    let fontTable = UITableView()
 
     override func bind(_ viewModel: FontViewBindable) {
         self.disposeBag = DisposeBag()
 
-        Observable.merge(
-            lightButton.rx.controlEvent(.touchUpInside).asObservable()
-                .map{ UIFont.Weight.light },
-            regularButton.rx.controlEvent(.touchUpInside).asObservable()
-                .map{ UIFont.Weight.regular },
-            boldButton.rx.controlEvent(.touchUpInside).asObservable()
-                .map{ UIFont.Weight.bold }
-        )
+        Observable.of(FontManagerImpl.shared.getFontList())
+            .bind(to: fontTable.rx.items) { (_, _, title) -> UITableViewCell in
+                let cell = UITableViewCell()
+                cell.textLabel?.text = title
+                cell.backgroundColor = UIConstant.Setting.backgroundColor
+                cell.textLabel?.textColor = UIConstant.Setting.fontColor
+                return cell
+        }
+        .disposed(by: disposeBag)
+
+        fontTable.rx.itemSelected
+            .map { indexPath -> String? in
+                guard let cell = self.fontTable.cellForRow(at: indexPath) else { return nil }
+                _ = self.fontTable.visibleCells.map { $0.accessoryType = .none }
+                cell.accessoryType = .checkmark
+                return cell.textLabel?.text
+        }
+        .filterNil()
         .bind(to: viewModel.fontData)
         .disposed(by: disposeBag)
     }
 
     override func attribute() {
         self.backgroundColor = UIConstant.Setting.backgroundColor
-
-        lightButton.setTitle("light", for: .normal)
-        regularButton.setTitle("regular", for: .normal)
-        boldButton.setTitle("bold", for: .normal)
+        fontTable.backgroundColor = UIConstant.Setting.backgroundColor
     }
 
     override func layout() {
-        self.addHorizentalSubviews([lightButton, regularButton, boldButton], ratio: UIConstant.Setting.leftRatio, margin: UIConstant.Setting.leftMargin)
+        self.addSubview(fontTable)
 
-        _ = [lightButton, regularButton, boldButton].map {
-            $0.snp.makeConstraints {
-                $0.top.bottom.height.equalToSuperview()
-            }
+        fontTable.snp.makeConstraints {
+            $0.top.bottom.leading.trailing.equalToSuperview()
         }
     }
 }
