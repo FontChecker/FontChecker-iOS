@@ -14,6 +14,7 @@ struct FontViewModel: FontViewBindable {
     let disposeBag = DisposeBag()
 
     let fontData = PublishRelay<String>()
+    let getFontList = PublishRelay<[String]>()
 
     init() { }
 }

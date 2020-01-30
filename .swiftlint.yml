@@ -1,6 +1,8 @@
 disabled_rules:
 - line_length
 - opening_brace
+- trailing_whitespace
+- function_body_length
 
 included:
 

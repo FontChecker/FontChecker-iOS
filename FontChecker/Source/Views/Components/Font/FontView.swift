@@ -12,6 +12,7 @@ import RxCocoa
 
 protocol FontViewBindable {
     var fontData: PublishRelay<String> { get }
+    var getFontList: PublishRelay<[String]> { get }
 }
 
 class FontView: SettingView<FontViewBindable> {
@@ -20,15 +21,15 @@ class FontView: SettingView<FontViewBindable> {
     override func bind(_ viewModel: FontViewBindable) {
         self.disposeBag = DisposeBag()
 
-        Observable.of(FontManagerImpl.shared.getFontList())
+        viewModel.getFontList
             .bind(to: fontTable.rx.items) { (_, _, title) -> UITableViewCell in
                 let cell = UITableViewCell()
                 cell.textLabel?.text = title
                 cell.backgroundColor = UIConstant.Setting.backgroundColor
                 cell.textLabel?.textColor = UIConstant.Setting.fontColor
                 return cell
-        }
-        .disposed(by: disposeBag)
+            }
+            .disposed(by: disposeBag)
 
         fontTable.rx.itemSelected
             .map { indexPath -> String? in
@@ -36,10 +37,10 @@ class FontView: SettingView<FontViewBindable> {
                 _ = self.fontTable.visibleCells.map { $0.accessoryType = .none }
                 cell.accessoryType = .checkmark
                 return cell.textLabel?.text
-        }
-        .filterNil()
-        .bind(to: viewModel.fontData)
-        .disposed(by: disposeBag)
+            }
+            .filterNil()
+            .bind(to: viewModel.fontData)
+            .disposed(by: disposeBag)
     }
 
     override func attribute() {

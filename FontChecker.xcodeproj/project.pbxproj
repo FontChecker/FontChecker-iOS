@@ -35,6 +35,8 @@
 		DDCC67FC23AB17F60028C5C1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCC67FB23AB17F60028C5C1 /* Constants.swift */; };
 		DDCC680623AB4BF40028C5C1 /* FCButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCC680523AB4BF40028C5C1 /* FCButton.swift */; };
 		DDCC680823AB51170028C5C1 /* UIView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCC680723AB51170028C5C1 /* UIView+Layout.swift */; };
+		DDFA5DA023E26EEC007599F2 /* MainModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFA5D9F23E26EEC007599F2 /* MainModel.swift */; };
+		DDFA5DA223E2932C007599F2 /* Reactive+UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFA5DA123E2932C007599F2 /* Reactive+UIViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +97,8 @@
 		DDCC67FB23AB17F60028C5C1 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		DDCC680523AB4BF40028C5C1 /* FCButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FCButton.swift; sourceTree = "<group>"; };
 		DDCC680723AB51170028C5C1 /* UIView+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Layout.swift"; sourceTree = "<group>"; };
+		DDFA5D9F23E26EEC007599F2 /* MainModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainModel.swift; sourceTree = "<group>"; };
+		DDFA5DA123E2932C007599F2 /* Reactive+UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Reactive+UIViewController.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -194,6 +198,7 @@
 			children = (
 				DD8FC58F23A89FFD00A9B60F /* MainViewController.swift */,
 				DD5CCB5423A9E80B00250A17 /* MainViewModel.swift */,
+				DDFA5D9F23E26EEC007599F2 /* MainModel.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -253,7 +258,6 @@
 			isa = PBXGroup;
 			children = (
 				DDCC67FF23AB3EFC0028C5C1 /* Commons */,
-				DD8A797D23B5A4150062CD1D /* ViewController.swift */,
 				DD8A797F23B5A4BE0062CD1D /* Main */,
 				DD22449B23AC86330007065A /* Components */,
 			);
@@ -311,6 +315,7 @@
 		DDCC67FF23AB3EFC0028C5C1 /* Commons */ = {
 			isa = PBXGroup;
 			children = (
+				DD8A797D23B5A4150062CD1D /* ViewController.swift */,
 				DDCC680523AB4BF40028C5C1 /* FCButton.swift */,
 			);
 			path = Commons;
@@ -320,6 +325,7 @@
 			isa = PBXGroup;
 			children = (
 				DDCC680723AB51170028C5C1 /* UIView+Layout.swift */,
+				DDFA5DA123E2932C007599F2 /* Reactive+UIViewController.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -613,6 +619,7 @@
 				DD22449D23AC86950007065A /* SettingView.swift in Sources */,
 				DD9FE6CE23B4ADDA00117CFC /* SizeView.swift in Sources */,
 				DD8FC59023A89FFD00A9B60F /* MainViewController.swift in Sources */,
+				DDFA5DA223E2932C007599F2 /* Reactive+UIViewController.swift in Sources */,
 				DD740AC023B5F64800D70FD3 /* Downloader.swift in Sources */,
 				DD83EE7023B0A67900972145 /* FontViewModel.swift in Sources */,
 				DD5CCB5323A9E1AE00250A17 /* FontView.swift in Sources */,
@@ -621,6 +628,7 @@
 				DD8FC58E23A89FFD00A9B60F /* SceneDelegate.swift in Sources */,
 				DDCC680623AB4BF40028C5C1 /* FCButton.swift in Sources */,
 				DDCC67FC23AB17F60028C5C1 /* Constants.swift in Sources */,
+				DDFA5DA023E26EEC007599F2 /* MainModel.swift in Sources */,
 				DD740ABE23B5F14700D70FD3 /* FontManagerImpl.swift in Sources */,
 				DD0FEB8D23B9C1100023627E /* DownloaderImpl.swift in Sources */,
 				DD22449F23AC88920007065A /* ColorView.swift in Sources */,

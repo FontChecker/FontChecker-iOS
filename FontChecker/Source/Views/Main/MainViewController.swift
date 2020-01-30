@@ -19,6 +19,8 @@ protocol MainViewBindable {
     var textColorViewModel: ColorViewBindable { get }
     var sizeViewModel: SizeViewBindable { get }
     var attributes: PublishRelay<[NSAttributedString.Key: Any]> { get }
+    var downloadURL: PublishRelay<String> { get }
+    var resultMessage: Signal<String> { get }
 }
 
 class MainViewController: ViewController<MainViewBindable> {
@@ -35,6 +37,7 @@ class MainViewController: ViewController<MainViewBindable> {
     let bgColorView = ColorView()
     let textColorView = ColorView()
     let sizeView = SizeView()
+    let indicator = UIActivityIndicatorView()
 
     var attributes = [NSAttributedString.Key: Any]()
     var tempAttributeText: NSAttributedString = NSAttributedString(string: "")
@@ -56,6 +59,35 @@ class MainViewController: ViewController<MainViewBindable> {
                 self.attributes.updateValue($0.values.first!, forKey: $0.keys.first!)
                 self.textView.attributedText = NSMutableAttributedString(string: self.textView.text, attributes: self.attributes)
             })
+            .disposed(by: disposeBag)
+
+        addFontButton.rx.tap.asObservable()
+            .subscribeOn(MainScheduler.instance)
+            .subscribe(onNext: { [weak self] _ in
+                let prompt = UIAlertController(title: "다운받을 URL 입력해주세요", message: nil, preferredStyle: .alert)
+                prompt.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+                prompt.addTextField(configurationHandler: { textField in
+                    textField.placeholder = "Input Download for font URL..."
+                })
+                prompt.addAction(UIAlertAction(title: "다운로드", style: .default, handler: { _ in
+                    if let url = prompt.textFields?.first?.text {
+                        viewModel.downloadURL.accept(url)
+                        self?.indicator.startAnimating()
+                        self?.indicator.isHidden = false
+                    }
+                }))
+                
+                self?.present(prompt, animated: true, completion: nil)
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.resultMessage
+            .emit(to: self.rx.notify())
+            .disposed(by: disposeBag)
+        
+        fontButton.rx.controlEvent(.touchUpInside).asObservable()
+            .map{ _ in FontManagerImpl.shared.getFontList() }
+            .bind(to: viewModel.fontViewModel.getFontList)
             .disposed(by: disposeBag)
 
         bindUI()

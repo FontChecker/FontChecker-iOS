@@ -17,10 +17,13 @@ struct MainViewModel: MainViewBindable {
     let bgColorViewModel: ColorViewBindable
     let textColorViewModel: ColorViewBindable
     let sizeViewModel: SizeViewBindable
+    
+    let downloadURL = PublishRelay<String>()
+    let resultMessage: Signal<String>
 
     var attributes = PublishRelay<[NSAttributedString.Key: Any]>()
-
-    init() {
+    
+    init(model: MainModel = MainModel()) {
         self.fontViewModel = FontViewModel()
         self.bgColorViewModel = ColorViewModel()
         self.textColorViewModel = ColorViewModel()
@@ -39,5 +42,37 @@ struct MainViewModel: MainViewBindable {
             textColorViewModel.colorData.asObservable().map{ [NSAttributedString.Key.foregroundColor: $0] })
             .bind(to: attributes)
             .disposed(by: disposeBag)
+
+        let fileDownload = downloadURL
+            .flatMap(model.getDownloadFile(url:))
+            .asObservable()
+            .share()
+        
+        fileDownload
+            .map { result -> String? in
+                guard case .success(let url) = result else {
+                    return nil
+                }
+                return url
+            }
+            .filterNil()
+            .subscribe { event in
+                guard let url = event.element else { return }
+                model.fontManager.setCustomFonts(fontURL: url)
+            }
+            .disposed(by: disposeBag)
+
+        let fileDownloadError = fileDownload
+            .map { result -> String? in
+                guard case .failure(let error) = result else {
+                    return nil
+                }
+                return error.message
+            }
+            .filterNil()
+        
+        self.resultMessage = Observable
+            .merge(fileDownloadError)
+            .asSignal(onErrorJustReturn: FTError.defaultError.message ?? "")
     }
 }

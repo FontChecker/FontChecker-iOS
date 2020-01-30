@@ -11,5 +11,7 @@ import RxSwift
 
 protocol FontManager {
     func getFontList() -> [String]
-    func installFont(filePath: String) -> Observable<Result<String, FTError>>
+//    func installFont(filePath: String) -> Observable<Result<String, FTError>>
+    func getCustomFonts() -> [String]?
+    func setCustomFonts(fontURL: String)
 }
