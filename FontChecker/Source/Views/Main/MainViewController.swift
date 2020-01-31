@@ -38,9 +38,11 @@ class MainViewController: ViewController<MainViewBindable> {
     let textColorView = ColorView()
     let sizeView = SizeView()
     let indicator = UIActivityIndicatorView()
+    
+    private typealias UI = Constant.UI.Main
 
     var attributes: [NSAttributedString.Key: Any] = [
-        NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15),
+        NSAttributedString.Key.font: UIFont.systemFont(ofSize: Constant.UI.Base.fontSize),
         NSAttributedString.Key.backgroundColor: UIColor.white,
         NSAttributedString.Key.foregroundColor: UIColor.black
     ]
@@ -112,13 +114,13 @@ class MainViewController: ViewController<MainViewBindable> {
 
         Observable.merge(
             fontButton.rx.controlEvent(.touchUpInside).asObservable()
-                .map { _ -> (UIView, CGFloat) in (self.fontView, Constant.UI.Setting.fontViewHeight) },
+                .map { _ -> (UIView, CGFloat) in (self.fontView, Constant.UI.Font.height) },
             bgColorButton.rx.controlEvent(.touchUpInside).asObservable()
-                .map { _ -> (UIView, CGFloat) in (self.bgColorView, Constant.UI.Setting.colorViewHeight) },
+                .map { _ -> (UIView, CGFloat) in (self.bgColorView, Constant.UI.Color.height) },
             textColorButton.rx.controlEvent(.touchUpInside).asObservable()
-                .map { _ -> (UIView, CGFloat) in (self.textColorView, Constant.UI.Setting.colorViewHeight) },
+                .map { _ -> (UIView, CGFloat) in (self.textColorView, Constant.UI.Color.height) },
             sizeButton.rx.controlEvent(.touchUpInside).asObservable()
-                .map { _ -> (UIView, CGFloat) in (self.sizeView, Constant.UI.Setting.sizeViewHeight) })
+                .map { _ -> (UIView, CGFloat) in (self.sizeView, Constant.UI.Size.height) })
             .subscribe(onNext: { (subview, height) in
                 self.tempAttributes = self.attributes
                 self.navigationItem.leftBarButtonItem = self.doneButton
@@ -143,7 +145,7 @@ class MainViewController: ViewController<MainViewBindable> {
         }
 
         settingView.do {
-            $0.backgroundColor = Constant.UI.Setting.backgroundColor
+            $0.backgroundColor = UI.backgroundColor
             $0.showsHorizontalScrollIndicator = false
         }
 
@@ -156,19 +158,19 @@ class MainViewController: ViewController<MainViewBindable> {
 
     override func layout() {
         view.addSubview(textView)
-        settingView.addHorizentalSubviews([fontButton, bgColorButton, textColorButton, sizeButton, addFontButton], ratio: Constant.UI.Setting.leftRatio, margin: Constant.UI.Setting.leftMargin)
-        settingView.contentSize = CGSize(width: view.frame.width + (Constant.UI.Setting.leftMargin * CGFloat(settingView.subviews.count)), height: settingView.bounds.height)
+        settingView.addHorizentalSubviews([fontButton, bgColorButton, textColorButton, sizeButton, addFontButton], ratio: UI.leftRatio, margin: UI.leftMargin)
+        settingView.contentSize = CGSize(width: view.frame.width + (UI.leftMargin * CGFloat(settingView.subviews.count)), height: settingView.bounds.height)
         view.addSubview(settingView)
 
         settingView.snp.makeConstraints {
             $0.trailing.leading.bottom.equalToSuperview()
-            $0.height.equalTo(Constant.UI.Setting.height)
+            $0.height.equalTo(UI.height)
         }
 
         _ = [fontButton, bgColorButton, textColorButton, sizeButton, addFontButton].map {
             $0.snp.makeConstraints {
-                $0.height.equalTo(Constant.UI.Setting.buttonHeight)
-                $0.top.equalToSuperview().inset(Constant.UI.Setting.topMargin)
+                $0.height.equalTo(UI.buttonHeight)
+                $0.top.equalToSuperview().inset(UI.topMargin)
             }
         }
 

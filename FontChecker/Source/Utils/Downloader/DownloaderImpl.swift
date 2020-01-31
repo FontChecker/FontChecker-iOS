@@ -19,7 +19,7 @@ class DownloaderImpl: Downloader {
         self.fileManager = fileManager
     }
 
-    func createDirectory(dirName: String = FileConstant.Path.baseDirName) -> String? {
+    func createDirectory(dirName: String = Constant.File.Path.baseDirName) -> String? {
         let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let directoryURL = documentsURL.appendingPathComponent(dirName)
         if fileManager.fileExists(atPath: directoryURL.path) { return directoryURL.path }

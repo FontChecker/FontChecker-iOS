@@ -22,6 +22,8 @@ class ColorView: SettingView<ColorViewBindable> {
     let redTextField = UITextField()
     let greenTextField = UITextField()
     let blueTextField = UITextField()
+    
+    private typealias UI = Constant.UI.Color
 
     override func bind(_ viewModel: ColorViewBindable) {
         self.disposeBag = DisposeBag()
@@ -56,7 +58,7 @@ class ColorView: SettingView<ColorViewBindable> {
     }
 
     override func attribute() {
-        self.backgroundColor = Constant.UI.Setting.backgroundColor
+        self.backgroundColor = UI.backgroundColor
 
         _ = [redSlider, greenSlider, blueSlider].map {
             $0.minimumValue = 0
@@ -64,13 +66,13 @@ class ColorView: SettingView<ColorViewBindable> {
             $0.value = 127.5
             $0.maximumTrackTintColor = .white
         }
-        redSlider.minimumTrackTintColor = Constant.UI.Color.red
-        greenSlider.minimumTrackTintColor = Constant.UI.Color.green
-        blueSlider.minimumTrackTintColor = Constant.UI.Color.blue
+        redSlider.minimumTrackTintColor = Constant.UI.Base.Color.red
+        greenSlider.minimumTrackTintColor = Constant.UI.Base.Color.green
+        blueSlider.minimumTrackTintColor = Constant.UI.Base.Color.blue
 
         _ = [redTextField, greenTextField, blueTextField].map {
             $0.font = UIFont.systemFont(ofSize: Constant.UI.Base.fontSize, weight: .bold)
-            $0.layer.cornerRadius = Constant.UI.Setting.textFieldRadius
+            $0.layer.cornerRadius = UI.textFieldRadius
             $0.textColor = .white
             $0.textAlignment = .center
             $0.keyboardType = .numberPad
@@ -78,27 +80,27 @@ class ColorView: SettingView<ColorViewBindable> {
 
         redTextField.do {
             $0.text = "\(self.redSlider.value)"
-            $0.backgroundColor = Constant.UI.Color.red
+            $0.backgroundColor = Constant.UI.Base.Color.red
         }
 
         greenTextField.do {
             $0.text = "\(self.greenSlider.value)"
-            $0.backgroundColor = Constant.UI.Color.green
+            $0.backgroundColor = Constant.UI.Base.Color.green
         }
 
         blueTextField.do {
             $0.text = "\(self.blueSlider.value)"
-            $0.backgroundColor = Constant.UI.Color.blue
+            $0.backgroundColor = Constant.UI.Base.Color.blue
         }
     }
 
     override func layout() {
         let colorTextView = UIView()
-        colorTextView.addHorizentalSubviews([redTextField, greenTextField, blueTextField], ratio: Constant.UI.Setting.leftRatio, margin: Constant.UI.Setting.leftMargin)
+        colorTextView.addHorizentalSubviews([redTextField, greenTextField, blueTextField], ratio: UI.leftRatio, margin: UI.leftMargin)
 
-        self.addVerticalSubviews([blueSlider, greenSlider, redSlider, colorTextView], margin: Constant.UI.Setting.bottomMargin)
+        self.addVerticalSubviews([blueSlider, greenSlider, redSlider, colorTextView], margin: UI.bottomMargin)
         colorTextView.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(Constant.UI.Setting.topMargin)
+            $0.top.equalToSuperview().inset(UI.topMargin)
         }
     }
 }

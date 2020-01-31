@@ -16,7 +16,7 @@ class FCButton: UIButton {
             $0.titleLabel?.font = UIFont.systemFont(ofSize: Constant.UI.Base.fontSize)
             $0.setTitleColor(.black, for: .normal)
             $0.backgroundColor = .white
-            $0.layer.cornerRadius = Constant.UI.Setting.buttonRadius
+            $0.layer.cornerRadius = 15
         }
     }
 

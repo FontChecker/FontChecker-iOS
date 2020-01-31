@@ -18,6 +18,8 @@ protocol SizeViewBindable {
 class SizeView: SettingView<SizeViewBindable> {
     let sizeSlider = UISlider()
     let sizeTextField = UITextField()
+    
+    private typealias UI = Constant.UI.Size
 
     override func bind(_ viewModel: SizeViewBindable) {
         let sliderValueChange = sizeSlider.rx.controlEvent(.valueChanged).asObservable()
@@ -40,7 +42,7 @@ class SizeView: SettingView<SizeViewBindable> {
     }
 
     override func attribute() {
-        self.backgroundColor = Constant.UI.Setting.backgroundColor
+        self.backgroundColor = UI.backgroundColor
 
         sizeSlider.do {
             $0.minimumValue = 0
@@ -51,7 +53,7 @@ class SizeView: SettingView<SizeViewBindable> {
 
         sizeTextField.do {
             $0.font = UIFont.systemFont(ofSize: Constant.UI.Base.fontSize, weight: .bold)
-            $0.layer.cornerRadius = Constant.UI.Setting.textFieldRadius
+            $0.layer.cornerRadius = UI.textFieldRadius
             $0.textColor = .white
             $0.textAlignment = .center
             $0.keyboardType = .numberPad
@@ -61,7 +63,7 @@ class SizeView: SettingView<SizeViewBindable> {
     }
 
     override func layout() {
-        self.addVerticalSubviews([sizeSlider, sizeTextField], ratio: Constant.UI.Setting.bottomRatio, margin: Constant.UI.Setting.bottomMargin)
+        self.addVerticalSubviews([sizeSlider, sizeTextField], ratio: UI.bottomRatio, margin: UI.bottomMargin)
 
         sizeTextField.snp.makeConstraints {
             $0.width.equalToSuperview().dividedBy(4)
