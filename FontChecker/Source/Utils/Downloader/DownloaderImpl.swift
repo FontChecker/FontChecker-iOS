@@ -39,7 +39,7 @@ class DownloaderImpl: Downloader {
             return .just(.failure(error))
         }
         
-        guard let filePath = createDirectory(),
+        guard let folderPath = createDirectory(),
             let fileName = url.split(separator: "/").last else {
             let error = FTError.error("파일 생성 실패.")
             return .just(.failure(error))
@@ -47,6 +47,12 @@ class DownloaderImpl: Downloader {
         
         if fileName.split(separator: ".").last ?? "" != "otf" {
             let error = FTError.error("올바르지 않은 파일입니다.")
+            return .just(.failure(error))
+        }
+
+        let filePath = folderPath + "/" + fileName
+        if FontManagerImpl.shared.isAlreadyFont(filePath) {
+            let error = FTError.error("이미 존재하는 폰트입니다.")
             return .just(.failure(error))
         }
         
@@ -58,10 +64,9 @@ class DownloaderImpl: Downloader {
                     return
                 }
                 
-                let file = filePath + "/" + fileName
-                if FileManager.default.createFile(atPath: file, contents: data, attributes: nil) {
-                    print("파일 저장 위치 \(file)")
-                    observer.onNext(.success(file))
+                if FileManager.default.createFile(atPath: filePath, contents: data, attributes: nil) {
+                    print("파일 저장 위치 \(filePath)")
+                    observer.onNext(.success(filePath))
                     observer.onCompleted()
                     return
                 }

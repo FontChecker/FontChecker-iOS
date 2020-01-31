@@ -48,13 +48,18 @@ class FontManagerImpl: FontManager {
     
     func setCustomFonts(fontURL: String) {
         var customFonts: [String] = UserDefaults.standard.value(forKey: "CustomFonts") as? [String] ?? []
-        if !customFonts.contains(fontURL) { customFonts.append(fontURL) }
+        if !isAlreadyFont(fontURL) { customFonts.append(fontURL) }
         
         UserDefaults.standard.set(customFonts, forKey: "CustomFonts")
     }
     
     func getCustomFonts() -> [String]? {
         return UserDefaults.standard.value(forKey: "CustomFonts") as? [String]
+    }
+    
+    func isAlreadyFont(_ fontURL: String) -> Bool {
+        let customFonts: [String] = UserDefaults.standard.value(forKey: "CustomFonts") as? [String] ?? []
+        return customFonts.contains(fontURL)
     }
 }
    

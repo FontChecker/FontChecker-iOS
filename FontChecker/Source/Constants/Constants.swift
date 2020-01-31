@@ -35,12 +35,12 @@ public struct Constant {
         struct Font {
             static let height: CGFloat = 180
             static let fontColor: UIColor = .black
-            static let backgroundColor: UIColor = .white
+            static let backgroundColor: UIColor = UIColor(displayP3Red: (231/255), green: (232/255), blue: (233/255), alpha: 1.0)
         }
         
         struct Color {
             static let height: CGFloat = 180
-            static let backgroundColor: UIColor = .white
+            static let backgroundColor: UIColor = UIColor(displayP3Red: (231/255), green: (232/255), blue: (233/255), alpha: 1.0)
             static let leftMargin: CGFloat = 15
             static let leftRatio: CGFloat = 0.5
             static let bottomMargin: CGFloat = 15
@@ -50,7 +50,7 @@ public struct Constant {
         
         struct Size {
             static let height: CGFloat = 130
-            static let backgroundColor: UIColor = .white
+            static let backgroundColor: UIColor = UIColor(displayP3Red: (231/255), green: (232/255), blue: (233/255), alpha: 1.0)
             static let bottomMargin: CGFloat = 15
             static let bottomRatio: CGFloat = 0.5
             static let textFieldRadius: CGFloat = 10
