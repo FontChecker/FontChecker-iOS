@@ -10,6 +10,6 @@ import Foundation
 import RxSwift
 
 protocol Downloader {
-    func createDirectory(dirName: String)
-    func downloadFile(url: String) -> Observable<Result<Data, FTError>>
+    func createDirectory(dirName: String) -> String?
+    func downloadFile(url: String) -> Observable<Result<String, FTError>>
 }

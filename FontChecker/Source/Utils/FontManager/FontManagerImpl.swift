@@ -16,31 +16,51 @@ class FontManagerImpl: FontManager {
 
     func getFontList() -> [String]{
         var fontNames = [String]()
+        
+        if let customFonts = getCustomFonts() {
+            for name in customFonts {
+                print("loadCustom Font \(name)")
+                loadCustomFont(filePath: name)
+            }
+        }
+        
         for name in UIFont.familyNames {
             fontNames.append(contentsOf: UIFont.fontNames(forFamilyName: name))
         }
+        
         return fontNames
     }
-
-    func installFont(filePath: String) -> Observable<Result<String, FTError>> {
-        guard let fontData = NSData(contentsOfFile: filePath)
-            ,let dataProvider = CGDataProvider.init(data: fontData)
-            ,let cgFont = CGFont.init(dataProvider) else {
-                let err = FTError.error("폰트 파일 오류입니다.")
-                return .just(.failure(err))
+    
+    func loadCustomFont(filePath: String) {
+        guard let fontData = NSData(contentsOfFile: filePath),
+            let dataProvider = CGDataProvider.init(data: fontData),
+            let cgFont = CGFont.init(dataProvider) else {
+                print("폰트 파일 오류입니다. \(filePath)")
+                return
         }
 
         var error: Unmanaged<CFError>?
         if !CTFontManagerRegisterGraphicsFont(cgFont, &error) {
-            let err = FTError.error("폰트 설치를 실패하였습니다.")
-            return .just(.failure(err))
+            print("폰트 설치를 실패하였습니다.")
+            return
         }
-
-        guard let fontName = cgFont.postScriptName else {
-            let err = FTError.error("폰트 파일을 찾을 수 없습니다.")
-            return .just(.failure(err))
-        }
-
-        return .just(.success(String(fontName)))
+    }
+    
+    func setCustomFonts(fontURL: String) {
+        var customFonts: [String] = UserDefaults.standard.value(forKey: "CustomFonts") as? [String] ?? []
+        if !isAlreadyFont(fontURL) { customFonts.append(fontURL) }
+        
+        UserDefaults.standard.set(customFonts, forKey: "CustomFonts")
+    }
+    
+    func getCustomFonts() -> [String]? {
+        return UserDefaults.standard.value(forKey: "CustomFonts") as? [String]
+    }
+    
+    func isAlreadyFont(_ fontURL: String) -> Bool {
+        let customFonts: [String] = UserDefaults.standard.value(forKey: "CustomFonts") as? [String] ?? []
+        return customFonts.contains(fontURL)
     }
 }
+   
+//http://pop.baemin.com/fonts/yeonsung/BMYEONSUNG_otf.otf

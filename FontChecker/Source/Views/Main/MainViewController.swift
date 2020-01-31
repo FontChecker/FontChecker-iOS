@@ -19,6 +19,8 @@ protocol MainViewBindable {
     var textColorViewModel: ColorViewBindable { get }
     var sizeViewModel: SizeViewBindable { get }
     var attributes: PublishRelay<[NSAttributedString.Key: Any]> { get }
+    var downloadURL: PublishRelay<String> { get }
+    var resultMessage: Signal<String> { get }
 }
 
 class MainViewController: ViewController<MainViewBindable> {
@@ -35,9 +37,16 @@ class MainViewController: ViewController<MainViewBindable> {
     let bgColorView = ColorView()
     let textColorView = ColorView()
     let sizeView = SizeView()
+    let indicator = UIActivityIndicatorView()
+    
+    private typealias UI = Constant.UI.Main
 
-    var attributes = [NSAttributedString.Key: Any]()
-    var tempAttributeText: NSAttributedString = NSAttributedString(string: "")
+    var attributes: [NSAttributedString.Key: Any] = [
+        NSAttributedString.Key.font: UIFont.systemFont(ofSize: Constant.UI.Base.fontSize),
+        NSAttributedString.Key.backgroundColor: UIColor.white,
+        NSAttributedString.Key.foregroundColor: UIColor.black
+    ]
+    var tempAttributes = [NSAttributedString.Key: Any]()
 
     override func bind(_ viewModel: MainViewBindable) {
         self.disposeBag = DisposeBag()
@@ -48,27 +57,55 @@ class MainViewController: ViewController<MainViewBindable> {
                 self.bgColorView.bind(viewModel.bgColorViewModel)
                 self.textColorView.bind(viewModel.textColorViewModel)
                 self.sizeView.bind(viewModel.sizeViewModel)
+                self.textView.attributedText = NSMutableAttributedString(string: self.textView.text, attributes: self.attributes)
             })
             .disposed(by: disposeBag)
 
         viewModel.attributes
             .subscribe(onNext: {
-                self.attributes.updateValue($0.values.first!, forKey: $0.keys.first!)
-                self.textView.attributedText = NSMutableAttributedString(string: self.textView.text, attributes: self.attributes)
+                _ = $0.map { key, value in
+                    self.attributes.updateValue(value, forKey: key)
+                    self.textView.attributedText = NSMutableAttributedString(string: self.textView.text, attributes: self.attributes)
+                }
             })
             .disposed(by: disposeBag)
 
-        bindUI()
-    }
-
-    func bindUI() {
+        addFontButton.rx.tap.asObservable()
+            .subscribeOn(MainScheduler.instance)
+            .subscribe(onNext: { [weak self] _ in
+                let prompt = UIAlertController(title: "다운받을 URL 입력해주세요", message: nil, preferredStyle: .alert)
+                prompt.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+                prompt.addTextField(configurationHandler: { textField in
+                    textField.placeholder = "Input URL for download .otf file..."
+                })
+                prompt.addAction(UIAlertAction(title: "다운로드", style: .default, handler: { _ in
+                    if let url = prompt.textFields?.first?.text {
+                        viewModel.downloadURL.accept(url)
+                        self?.indicator.startAnimating()
+                        self?.indicator.isHidden = false
+                    }
+                }))
+                
+                self?.present(prompt, animated: true, completion: nil)
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.resultMessage
+            .emit(to: self.rx.notify())
+            .disposed(by: disposeBag)
+        
+        fontButton.rx.controlEvent(.touchUpInside).asObservable()
+            .map{ _ in FontManagerImpl.shared.getFontList() }
+            .bind(to: viewModel.fontViewModel.reloadFonts)
+            .disposed(by: disposeBag)
+        
         textView.rx.didChange
             .subscribe { _ in self.textView.attributedText = NSMutableAttributedString(string: self.textView.text, attributes: self.attributes) }
             .disposed(by: disposeBag)
 
         Observable.merge( doneButton.rx.tap.asObservable().map { return true }, cancleButton.rx.tap.asObservable().map { return false })
             .subscribe(onNext: {
-                if !($0) { self.textView.attributedText = self.tempAttributeText }
+                if !($0) { viewModel.attributes.accept(self.tempAttributes) }
                 self.navigationItem.leftBarButtonItem = nil
                 self.navigationItem.rightBarButtonItem = nil
                 self.view.subviews.last?.removeFromSuperview()
@@ -77,15 +114,15 @@ class MainViewController: ViewController<MainViewBindable> {
 
         Observable.merge(
             fontButton.rx.controlEvent(.touchUpInside).asObservable()
-                .map { _ -> (UIView, CGFloat) in (self.fontView, UIConstant.Setting.fontViewHeight) },
+                .map { _ -> (UIView, CGFloat) in (self.fontView, Constant.UI.Font.height) },
             bgColorButton.rx.controlEvent(.touchUpInside).asObservable()
-                .map { _ -> (UIView, CGFloat) in (self.bgColorView, UIConstant.Setting.colorViewHeight) },
+                .map { _ -> (UIView, CGFloat) in (self.bgColorView, Constant.UI.Color.height) },
             textColorButton.rx.controlEvent(.touchUpInside).asObservable()
-                .map { _ -> (UIView, CGFloat) in (self.textColorView, UIConstant.Setting.colorViewHeight) },
+                .map { _ -> (UIView, CGFloat) in (self.textColorView, Constant.UI.Color.height) },
             sizeButton.rx.controlEvent(.touchUpInside).asObservable()
-                .map { _ -> (UIView, CGFloat) in (self.sizeView, UIConstant.Setting.sizeViewHeight) })
+                .map { _ -> (UIView, CGFloat) in (self.sizeView, Constant.UI.Size.height) })
             .subscribe(onNext: { (subview, height) in
-                self.tempAttributeText = self.textView.attributedText
+                self.tempAttributes = self.attributes
                 self.navigationItem.leftBarButtonItem = self.doneButton
                 self.navigationItem.rightBarButtonItem = self.cancleButton
                 self.view.addSubview(subview)
@@ -104,11 +141,11 @@ class MainViewController: ViewController<MainViewBindable> {
 
         textView.do {
             $0.backgroundColor = .white
-            $0.font = UIConstant.Base.font
+            $0.font = Constant.UI.Base.font
         }
 
         settingView.do {
-            $0.backgroundColor = UIConstant.Setting.backgroundColor
+            $0.backgroundColor = UI.backgroundColor
             $0.showsHorizontalScrollIndicator = false
         }
 
@@ -121,19 +158,19 @@ class MainViewController: ViewController<MainViewBindable> {
 
     override func layout() {
         view.addSubview(textView)
-        settingView.addHorizentalSubviews([fontButton, bgColorButton, textColorButton, sizeButton, addFontButton], ratio: UIConstant.Setting.leftRatio, margin: UIConstant.Setting.leftMargin)
-        settingView.contentSize = CGSize(width: view.frame.width + (UIConstant.Setting.leftMargin * CGFloat(settingView.subviews.count)), height: settingView.bounds.height)
+        settingView.addHorizentalSubviews([fontButton, bgColorButton, textColorButton, sizeButton, addFontButton], ratio: UI.leftRatio, margin: UI.leftMargin)
+        settingView.contentSize = CGSize(width: view.frame.width + (UI.leftMargin * CGFloat(settingView.subviews.count)), height: settingView.bounds.height)
         view.addSubview(settingView)
 
         settingView.snp.makeConstraints {
             $0.trailing.leading.bottom.equalToSuperview()
-            $0.height.equalTo(UIConstant.Setting.height)
+            $0.height.equalTo(UI.height)
         }
 
         _ = [fontButton, bgColorButton, textColorButton, sizeButton, addFontButton].map {
             $0.snp.makeConstraints {
-                $0.height.equalTo(UIConstant.Setting.buttonHeight)
-                $0.top.equalToSuperview().inset(UIConstant.Setting.topMargin)
+                $0.height.equalTo(UI.buttonHeight)
+                $0.top.equalToSuperview().inset(UI.topMargin)
             }
         }
 

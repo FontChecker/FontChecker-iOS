@@ -12,23 +12,26 @@ import RxCocoa
 
 protocol FontViewBindable {
     var fontData: PublishRelay<String> { get }
+    var reloadFonts: PublishRelay<[String]> { get }
 }
 
 class FontView: SettingView<FontViewBindable> {
     let fontTable = UITableView()
+    
+    private typealias UI = Constant.UI.Font
 
     override func bind(_ viewModel: FontViewBindable) {
         self.disposeBag = DisposeBag()
 
-        Observable.of(FontManagerImpl.shared.getFontList())
+        viewModel.reloadFonts
             .bind(to: fontTable.rx.items) { (_, _, title) -> UITableViewCell in
                 let cell = UITableViewCell()
                 cell.textLabel?.text = title
-                cell.backgroundColor = UIConstant.Setting.backgroundColor
-                cell.textLabel?.textColor = UIConstant.Setting.fontColor
+                cell.backgroundColor = UI.backgroundColor
+                cell.textLabel?.textColor = UI.fontColor
                 return cell
-        }
-        .disposed(by: disposeBag)
+            }
+            .disposed(by: disposeBag)
 
         fontTable.rx.itemSelected
             .map { indexPath -> String? in
@@ -36,15 +39,15 @@ class FontView: SettingView<FontViewBindable> {
                 _ = self.fontTable.visibleCells.map { $0.accessoryType = .none }
                 cell.accessoryType = .checkmark
                 return cell.textLabel?.text
-        }
-        .filterNil()
-        .bind(to: viewModel.fontData)
-        .disposed(by: disposeBag)
+            }
+            .filterNil()
+            .bind(to: viewModel.fontData)
+            .disposed(by: disposeBag)
     }
 
     override func attribute() {
-        self.backgroundColor = UIConstant.Setting.backgroundColor
-        fontTable.backgroundColor = UIConstant.Setting.backgroundColor
+        self.backgroundColor = UI.backgroundColor
+        fontTable.backgroundColor = UI.backgroundColor
     }
 
     override func layout() {

@@ -19,32 +19,64 @@ class DownloaderImpl: Downloader {
         self.fileManager = fileManager
     }
 
-    func createDirectory(dirName: String = FileConstant.Path.baseDirName){
+    func createDirectory(dirName: String = Constant.File.Path.baseDirName) -> String? {
         let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let directoryURL = documentsURL.appendingPathComponent(dirName)
-        if fileManager.fileExists(atPath: directoryURL.path) { return }
+        if fileManager.fileExists(atPath: directoryURL.path) { return directoryURL.path }
 
         do {
             try fileManager.createDirectory(atPath: directoryURL.path, withIntermediateDirectories: true, attributes: nil)
+            return directoryURL.path
         } catch {
             NSLog("Directory 생성 실패")
+            return nil
         }
     }
 
-    func downloadFile(url: String) -> Observable<Result<Data, FTError>> {
-        guard let url = URLComponents(string: url)?.url else {
+    func downloadFile(url: String) -> Observable<Result<String, FTError>> {
+        guard let urlComp = URLComponents(string: url)?.url else {
             let error = FTError.error("유효하지 않은 URL입니다.")
             return .just(.failure(error))
         }
+        
+        guard let folderPath = createDirectory(),
+            let fileName = url.split(separator: "/").last else {
+            let error = FTError.error("파일 생성 실패.")
+            return .just(.failure(error))
+        }
+        
+        if fileName.split(separator: ".").last ?? "" != "otf" {
+            let error = FTError.error("올바르지 않은 파일입니다.")
+            return .just(.failure(error))
+        }
 
-        return session.rx.data(request: URLRequest(url: url))
-            .map { data in
-                do {
-                    let response = try JSONDecoder().decode(Data.self, from: data)
-                    return .success(response)
-                } catch {
-                    return .failure(.error("파일 다운로드 실패"))
+        let filePath = folderPath + "/" + fileName
+        if FontManagerImpl.shared.isAlreadyFont(filePath) {
+            let error = FTError.error("이미 존재하는 폰트입니다.")
+            return .just(.failure(error))
+        }
+        
+        return Observable.create { observer -> Disposable in
+            let task = self.session.dataTask(with: urlComp) { (data, _, error) in
+                if let error = error {
+                    observer.onNext(.failure(.error(error.localizedDescription)))
+                    observer.onCompleted()
+                    return
                 }
+                
+                if FileManager.default.createFile(atPath: filePath, contents: data, attributes: nil) {
+                    print("파일 저장 위치 \(filePath)")
+                    observer.onNext(.success(filePath))
+                    observer.onCompleted()
+                    return
+                }
+                
+                observer.onNext(.failure(.error("파일 저장 실패")))
+                observer.onCompleted()
+            }
+            
+            task.resume()
+            return Disposables.create()
         }
     }
 }
