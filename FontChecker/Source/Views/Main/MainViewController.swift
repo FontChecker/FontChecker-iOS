@@ -76,7 +76,7 @@ class MainViewController: ViewController<MainViewBindable> {
                 let prompt = UIAlertController(title: "다운받을 URL 입력해주세요", message: nil, preferredStyle: .alert)
                 prompt.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
                 prompt.addTextField(configurationHandler: { textField in
-                    textField.placeholder = "Input Download for font URL..."
+                    textField.placeholder = "Input URL for download .otf file..."
                 })
                 prompt.addAction(UIAlertAction(title: "다운로드", style: .default, handler: { _ in
                     if let url = prompt.textFields?.first?.text {

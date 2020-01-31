@@ -45,6 +45,11 @@ class DownloaderImpl: Downloader {
             return .just(.failure(error))
         }
         
+        if fileName.split(separator: ".").last ?? "" != "otf" {
+            let error = FTError.error("올바르지 않은 파일입니다.")
+            return .just(.failure(error))
+        }
+        
         return Observable.create { observer -> Disposable in
             let task = self.session.dataTask(with: urlComp) { (data, _, error) in
                 if let error = error {
