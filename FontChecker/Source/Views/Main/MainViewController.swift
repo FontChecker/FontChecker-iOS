@@ -39,8 +39,12 @@ class MainViewController: ViewController<MainViewBindable> {
     let sizeView = SizeView()
     let indicator = UIActivityIndicatorView()
 
-    var attributes = [NSAttributedString.Key: Any]()
-    var tempAttributeText: NSAttributedString = NSAttributedString(string: "")
+    var attributes: [NSAttributedString.Key: Any] = [
+        NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15),
+        NSAttributedString.Key.backgroundColor: UIColor.white,
+        NSAttributedString.Key.foregroundColor: UIColor.black
+    ]
+    var tempAttributes = [NSAttributedString.Key: Any]()
 
     override func bind(_ viewModel: MainViewBindable) {
         self.disposeBag = DisposeBag()
@@ -51,13 +55,16 @@ class MainViewController: ViewController<MainViewBindable> {
                 self.bgColorView.bind(viewModel.bgColorViewModel)
                 self.textColorView.bind(viewModel.textColorViewModel)
                 self.sizeView.bind(viewModel.sizeViewModel)
+                self.textView.attributedText = NSMutableAttributedString(string: self.textView.text, attributes: self.attributes)
             })
             .disposed(by: disposeBag)
 
         viewModel.attributes
             .subscribe(onNext: {
-                self.attributes.updateValue($0.values.first!, forKey: $0.keys.first!)
-                self.textView.attributedText = NSMutableAttributedString(string: self.textView.text, attributes: self.attributes)
+                _ = $0.map { key, value in
+                    self.attributes.updateValue(value, forKey: key)
+                    self.textView.attributedText = NSMutableAttributedString(string: self.textView.text, attributes: self.attributes)
+                }
             })
             .disposed(by: disposeBag)
 
@@ -89,18 +96,14 @@ class MainViewController: ViewController<MainViewBindable> {
             .map{ _ in FontManagerImpl.shared.getFontList() }
             .bind(to: viewModel.fontViewModel.reloadFonts)
             .disposed(by: disposeBag)
-
-        bindUI()
-    }
-
-    func bindUI() {
+        
         textView.rx.didChange
             .subscribe { _ in self.textView.attributedText = NSMutableAttributedString(string: self.textView.text, attributes: self.attributes) }
             .disposed(by: disposeBag)
 
         Observable.merge( doneButton.rx.tap.asObservable().map { return true }, cancleButton.rx.tap.asObservable().map { return false })
             .subscribe(onNext: {
-                if !($0) { self.textView.attributedText = self.tempAttributeText }
+                if !($0) { viewModel.attributes.accept(self.tempAttributes) }
                 self.navigationItem.leftBarButtonItem = nil
                 self.navigationItem.rightBarButtonItem = nil
                 self.view.subviews.last?.removeFromSuperview()
@@ -109,15 +112,15 @@ class MainViewController: ViewController<MainViewBindable> {
 
         Observable.merge(
             fontButton.rx.controlEvent(.touchUpInside).asObservable()
-                .map { _ -> (UIView, CGFloat) in (self.fontView, UIConstant.Setting.fontViewHeight) },
+                .map { _ -> (UIView, CGFloat) in (self.fontView, Constant.UI.Setting.fontViewHeight) },
             bgColorButton.rx.controlEvent(.touchUpInside).asObservable()
-                .map { _ -> (UIView, CGFloat) in (self.bgColorView, UIConstant.Setting.colorViewHeight) },
+                .map { _ -> (UIView, CGFloat) in (self.bgColorView, Constant.UI.Setting.colorViewHeight) },
             textColorButton.rx.controlEvent(.touchUpInside).asObservable()
-                .map { _ -> (UIView, CGFloat) in (self.textColorView, UIConstant.Setting.colorViewHeight) },
+                .map { _ -> (UIView, CGFloat) in (self.textColorView, Constant.UI.Setting.colorViewHeight) },
             sizeButton.rx.controlEvent(.touchUpInside).asObservable()
-                .map { _ -> (UIView, CGFloat) in (self.sizeView, UIConstant.Setting.sizeViewHeight) })
+                .map { _ -> (UIView, CGFloat) in (self.sizeView, Constant.UI.Setting.sizeViewHeight) })
             .subscribe(onNext: { (subview, height) in
-                self.tempAttributeText = self.textView.attributedText
+                self.tempAttributes = self.attributes
                 self.navigationItem.leftBarButtonItem = self.doneButton
                 self.navigationItem.rightBarButtonItem = self.cancleButton
                 self.view.addSubview(subview)
@@ -136,11 +139,11 @@ class MainViewController: ViewController<MainViewBindable> {
 
         textView.do {
             $0.backgroundColor = .white
-            $0.font = UIConstant.Base.font
+            $0.font = Constant.UI.Base.font
         }
 
         settingView.do {
-            $0.backgroundColor = UIConstant.Setting.backgroundColor
+            $0.backgroundColor = Constant.UI.Setting.backgroundColor
             $0.showsHorizontalScrollIndicator = false
         }
 
@@ -153,19 +156,19 @@ class MainViewController: ViewController<MainViewBindable> {
 
     override func layout() {
         view.addSubview(textView)
-        settingView.addHorizentalSubviews([fontButton, bgColorButton, textColorButton, sizeButton, addFontButton], ratio: UIConstant.Setting.leftRatio, margin: UIConstant.Setting.leftMargin)
-        settingView.contentSize = CGSize(width: view.frame.width + (UIConstant.Setting.leftMargin * CGFloat(settingView.subviews.count)), height: settingView.bounds.height)
+        settingView.addHorizentalSubviews([fontButton, bgColorButton, textColorButton, sizeButton, addFontButton], ratio: Constant.UI.Setting.leftRatio, margin: Constant.UI.Setting.leftMargin)
+        settingView.contentSize = CGSize(width: view.frame.width + (Constant.UI.Setting.leftMargin * CGFloat(settingView.subviews.count)), height: settingView.bounds.height)
         view.addSubview(settingView)
 
         settingView.snp.makeConstraints {
             $0.trailing.leading.bottom.equalToSuperview()
-            $0.height.equalTo(UIConstant.Setting.height)
+            $0.height.equalTo(Constant.UI.Setting.height)
         }
 
         _ = [fontButton, bgColorButton, textColorButton, sizeButton, addFontButton].map {
             $0.snp.makeConstraints {
-                $0.height.equalTo(UIConstant.Setting.buttonHeight)
-                $0.top.equalToSuperview().inset(UIConstant.Setting.topMargin)
+                $0.height.equalTo(Constant.UI.Setting.buttonHeight)
+                $0.top.equalToSuperview().inset(Constant.UI.Setting.topMargin)
             }
         }
 

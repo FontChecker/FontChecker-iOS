@@ -23,6 +23,8 @@ struct MainViewModel: MainViewBindable {
 
     var attributes = PublishRelay<[NSAttributedString.Key: Any]>()
     
+    private typealias UI = Constant.UI
+    
     init(model: MainModel = MainModel()) {
         self.fontViewModel = FontViewModel()
         self.bgColorViewModel = ColorViewModel()
@@ -30,8 +32,8 @@ struct MainViewModel: MainViewBindable {
         self.sizeViewModel = SizeViewModel()
 
         let fontChange = Observable.combineLatest(
-            fontViewModel.fontData.asObservable().startWith(UIConstant.Base.font.familyName),
-            sizeViewModel.sizeData.asObservable().startWith(UIConstant.Base.fontSize))
+            fontViewModel.fontData.asObservable().startWith(UI.Base.font.familyName),
+            sizeViewModel.sizeData.asObservable().startWith(UI.Base.fontSize))
             .map { (font, size) -> [NSAttributedString.Key: Any] in
                 return [NSAttributedString.Key.font: UIFont(name: font, size: size) ?? UIFont.systemFont(ofSize: size)]
             }
@@ -48,7 +50,7 @@ struct MainViewModel: MainViewBindable {
             .asObservable()
             .share()
         
-        fileDownload
+        let fileDownloadResult = fileDownload
             .map { result -> String? in
                 guard case .success(let url) = result else {
                     return nil
@@ -56,6 +58,8 @@ struct MainViewModel: MainViewBindable {
                 return url
             }
             .filterNil()
+        
+        fileDownloadResult
             .subscribe { event in
                 guard let url = event.element else { return }
                 model.fontManager.setCustomFonts(fontURL: url)
@@ -72,7 +76,7 @@ struct MainViewModel: MainViewBindable {
             .filterNil()
         
         self.resultMessage = Observable
-            .merge(fileDownloadError)
+            .merge(fileDownloadError, fileDownloadResult.map{ _ in "폰트 다운로드 성공" })
             .asSignal(onErrorJustReturn: FTError.defaultError.message ?? "")
     }
 }

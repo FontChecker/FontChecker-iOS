@@ -25,8 +25,8 @@ class FontView: SettingView<FontViewBindable> {
             .bind(to: fontTable.rx.items) { (_, _, title) -> UITableViewCell in
                 let cell = UITableViewCell()
                 cell.textLabel?.text = title
-                cell.backgroundColor = UIConstant.Setting.backgroundColor
-                cell.textLabel?.textColor = UIConstant.Setting.fontColor
+                cell.backgroundColor = Constant.UI.Setting.backgroundColor
+                cell.textLabel?.textColor = Constant.UI.Setting.fontColor
                 return cell
             }
             .disposed(by: disposeBag)
@@ -44,8 +44,8 @@ class FontView: SettingView<FontViewBindable> {
     }
 
     override func attribute() {
-        self.backgroundColor = UIConstant.Setting.backgroundColor
-        fontTable.backgroundColor = UIConstant.Setting.backgroundColor
+        self.backgroundColor = Constant.UI.Setting.backgroundColor
+        fontTable.backgroundColor = Constant.UI.Setting.backgroundColor
     }
 
     override func layout() {

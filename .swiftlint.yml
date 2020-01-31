@@ -3,6 +3,8 @@ disabled_rules:
 - opening_brace
 - trailing_whitespace
 - function_body_length
+- type_name
+- nesting
 
 included:
 

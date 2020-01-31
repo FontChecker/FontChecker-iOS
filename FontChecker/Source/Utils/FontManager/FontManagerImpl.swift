@@ -48,7 +48,7 @@ class FontManagerImpl: FontManager {
     
     func setCustomFonts(fontURL: String) {
         var customFonts: [String] = UserDefaults.standard.value(forKey: "CustomFonts") as? [String] ?? []
-        customFonts.append(fontURL)
+        if !customFonts.contains(fontURL) { customFonts.append(fontURL) }
         
         UserDefaults.standard.set(customFonts, forKey: "CustomFonts")
     }
