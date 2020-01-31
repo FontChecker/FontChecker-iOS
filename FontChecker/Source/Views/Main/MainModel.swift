@@ -20,8 +20,4 @@ struct MainModel {
     func getDownloadFile(url: String) -> Observable<Result<String, FTError>> {
         return downloader.downloadFile(url: url)
     }
-    
-//    func getFontFile(localURL: String) -> Observable<Result<String, FTError>> {
-//        return fontManager.installFont(filePath: localURL)
-//    }
 }

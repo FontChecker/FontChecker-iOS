@@ -87,7 +87,7 @@ class MainViewController: ViewController<MainViewBindable> {
         
         fontButton.rx.controlEvent(.touchUpInside).asObservable()
             .map{ _ in FontManagerImpl.shared.getFontList() }
-            .bind(to: viewModel.fontViewModel.getFontList)
+            .bind(to: viewModel.fontViewModel.reloadFonts)
             .disposed(by: disposeBag)
 
         bindUI()

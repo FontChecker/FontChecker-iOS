@@ -12,7 +12,7 @@ import RxCocoa
 
 protocol FontViewBindable {
     var fontData: PublishRelay<String> { get }
-    var getFontList: PublishRelay<[String]> { get }
+    var reloadFonts: PublishRelay<[String]> { get }
 }
 
 class FontView: SettingView<FontViewBindable> {
@@ -21,7 +21,7 @@ class FontView: SettingView<FontViewBindable> {
     override func bind(_ viewModel: FontViewBindable) {
         self.disposeBag = DisposeBag()
 
-        viewModel.getFontList
+        viewModel.reloadFonts
             .bind(to: fontTable.rx.items) { (_, _, title) -> UITableViewCell in
                 let cell = UITableViewCell()
                 cell.textLabel?.text = title

@@ -31,8 +31,6 @@ class FontManagerImpl: FontManager {
         return fontNames
     }
     
- //http://pop.baemin.com/fonts/yeonsung/BMYEONSUNG_otf.otf
-    
     func loadCustomFont(filePath: String) {
         guard let fontData = NSData(contentsOfFile: filePath),
             let dataProvider = CGDataProvider.init(data: fontData),
@@ -46,13 +44,6 @@ class FontManagerImpl: FontManager {
             print("폰트 설치를 실패하였습니다.")
             return
         }
-
-        guard let fontName = cgFont.postScriptName else {
-            print("폰트 파일을 찾을 수 없습니다.")
-            return
-        }
-        
-        print("\(fontName)")
     }
     
     func setCustomFonts(fontURL: String) {
@@ -66,3 +57,5 @@ class FontManagerImpl: FontManager {
         return UserDefaults.standard.value(forKey: "CustomFonts") as? [String]
     }
 }
+   
+//http://pop.baemin.com/fonts/yeonsung/BMYEONSUNG_otf.otf
