@@ -26,14 +26,15 @@ public struct Constant {
         struct Main {
             static let backgroundColor: UIColor = UIColor(displayP3Red: (231/255), green: (232/255), blue: (233/255), alpha: 1.0)
             static let buttonHeight: CGFloat = 60
+            static let buttonWidth: CGFloat = 25
             static let height: CGFloat = buttonHeight + 50
             static let leftMargin: CGFloat = 15
-            static let leftRatio: CGFloat = 0.5
+            static let leftRatio: CGFloat = -1
             static let topMargin: CGFloat = 10
         }
         
         struct Font {
-            static let height: CGFloat = 180
+            static let height: CGFloat = 230
             static let fontColor: UIColor = .black
             static let backgroundColor: UIColor = UIColor(displayP3Red: (231/255), green: (232/255), blue: (233/255), alpha: 1.0)
         }

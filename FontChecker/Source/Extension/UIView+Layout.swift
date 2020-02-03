@@ -24,6 +24,11 @@ extension UIView {
                 $0.leading.equalTo(subviews[index-1].snp.trailing).offset(margin)
             }
         }
+        
+        guard let last = subviews.last else { return }
+        last.snp.makeConstraints {
+            $0.trailing.equalToSuperview().inset(margin)
+        }
     }
 
     func addVerticalSubviews(_ subviews: [UIView], ratio: CGFloat = 0.0, margin: CGFloat = 0.0) {
