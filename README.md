@@ -8,10 +8,12 @@
 
 ###  Feature
 1. Font 변경
-2. Background Color 변경
-3. Text Color 변경
-4. Text Size 변경
-5. Custom Font 다운로드 및 추가
+2. Custom Font 다운로드 및 추가
+3. Background Color 변경
+4. Text Color 변경
+5. Text 크기 변경
+6. 행간 크기 변경 (20.2.3 추가)
+7. 자간 크기 변경 (20.2.3 추가)
 
 <br>
 
