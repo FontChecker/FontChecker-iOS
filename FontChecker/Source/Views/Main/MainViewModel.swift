@@ -17,6 +17,7 @@ struct MainViewModel: MainViewBindable {
     let bgColorViewModel: ColorViewBindable
     let textColorViewModel: ColorViewBindable
     let sizeViewModel: SizeViewBindable
+    let lineViewModel: SizeViewBindable
     
     let downloadURL = PublishRelay<String>()
     let resultMessage: Signal<String>
@@ -30,6 +31,7 @@ struct MainViewModel: MainViewBindable {
         self.bgColorViewModel = ColorViewModel()
         self.textColorViewModel = ColorViewModel()
         self.sizeViewModel = SizeViewModel()
+        self.lineViewModel = SizeViewModel()
 
         let fontChange = Observable.combineLatest(
             fontViewModel.fontData.asObservable().startWith(UI.Base.font.familyName),
@@ -41,6 +43,11 @@ struct MainViewModel: MainViewBindable {
         Observable.merge(
             fontChange,
             bgColorViewModel.colorData.asObservable().map{ [NSAttributedString.Key.backgroundColor: $0] },
+            lineViewModel.sizeData.asObservable().map{
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.lineSpacing = $0
+                return [NSAttributedString.Key.paragraphStyle: paragraphStyle]
+            },
             textColorViewModel.colorData.asObservable().map{ [NSAttributedString.Key.foregroundColor: $0] })
             .bind(to: attributes)
             .disposed(by: disposeBag)
