@@ -64,3 +64,4 @@ class FontManagerImpl: FontManager {
 }
    
 //http://pop.baemin.com/fonts/yeonsung/BMYEONSUNG_otf.otf
+//http://pop.baemin.com/fonts/jua/BMJUA_otf.otf
