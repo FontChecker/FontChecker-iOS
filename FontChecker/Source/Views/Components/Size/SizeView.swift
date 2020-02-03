@@ -47,7 +47,7 @@ class SizeView: SettingView<SizeViewBindable> {
         sizeSlider.do {
             $0.minimumValue = 0
             $0.maximumValue = 100
-            $0.value = Float(Constant.UI.Base.fontSize)
+            $0.value = Float(0)
             $0.maximumTrackTintColor = .white
         }
 

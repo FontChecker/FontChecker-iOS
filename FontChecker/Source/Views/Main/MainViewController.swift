@@ -19,6 +19,7 @@ protocol MainViewBindable {
     var textColorViewModel: ColorViewBindable { get }
     var sizeViewModel: SizeViewBindable { get }
     var lineViewModel: SizeViewBindable { get }
+    var letterViewModel: SizeViewBindable { get }
     var attributes: PublishRelay<[NSAttributedString.Key: Any]> { get }
     var downloadURL: PublishRelay<String> { get }
     var resultMessage: Signal<String> { get }
@@ -37,11 +38,13 @@ class MainViewController: ViewController<MainViewBindable> {
     let sizeButton = FCButton()
     let addFontButton = FCButton()
     let lineButton = FCButton()
+    let letterButton = FCButton()
     let fontView = FontView()
     let bgColorView = ColorView()
     let textColorView = ColorView()
     let sizeView = SizeView()
     let lineView = SizeView()
+    let letterView = SizeView()
     
     private typealias UI = Constant.UI.Main
     
@@ -50,7 +53,8 @@ class MainViewController: ViewController<MainViewBindable> {
         NSAttributedString.Key.font: UIFont.systemFont(ofSize: Constant.UI.Base.fontSize),
         NSAttributedString.Key.backgroundColor: UIColor.white,
         NSAttributedString.Key.foregroundColor: UIColor.black,
-        NSAttributedString.Key.paragraphStyle: NSParagraphStyle()
+        NSAttributedString.Key.paragraphStyle: NSParagraphStyle(),
+        NSAttributedString.Key.kern: 0
     ]
 
     override func bind(_ viewModel: MainViewBindable) {
@@ -68,6 +72,8 @@ class MainViewController: ViewController<MainViewBindable> {
                 .map { _ -> (UIView, CGFloat) in (self.textColorView, Constant.UI.Color.height) },
             lineButton.rx.controlEvent(.touchUpInside).asObservable()
                 .map { _ -> (UIView, CGFloat) in (self.lineView, Constant.UI.Size.height) },
+            letterButton.rx.controlEvent(.touchUpInside).asObservable()
+                .map { _ -> (UIView, CGFloat) in (self.letterView, Constant.UI.Size.height) },
             sizeButton.rx.controlEvent(.touchUpInside).asObservable()
                 .map { _ -> (UIView, CGFloat) in (self.sizeView, Constant.UI.Size.height) })
             .subscribe(onNext: { (subview, height) in
@@ -131,6 +137,7 @@ class MainViewController: ViewController<MainViewBindable> {
                 self.textColorView.bind(viewModel.textColorViewModel)
                 self.sizeView.bind(viewModel.sizeViewModel)
                 self.lineView.bind(viewModel.lineViewModel)
+                self.letterView.bind(viewModel.letterViewModel)
                 self.textView.attributedText = NSMutableAttributedString(string: self.textView.text, attributes: self.attributes)
             })
             .disposed(by: disposeBag)
@@ -169,14 +176,16 @@ class MainViewController: ViewController<MainViewBindable> {
         textColorButton.setTitle("TEXT색", for: .normal)
         sizeButton.setTitle("TEXT크기", for: .normal)
         lineButton.setTitle("행간 크기", for: .normal)
+        letterButton.setTitle("자간 크기", for: .normal)
         addFontButton.setTitle("폰트 추가", for: .normal)
     }
 
     override func layout() {
         view.addSubview(textView)
-        let buttonViews = [fontButton, addFontButton, bgColorButton, textColorButton, sizeButton, lineButton]
-        settingView.addHorizentalSubviews(buttonViews, ratio: UI.leftRatio, margin: UI.leftMargin)
-        settingView.contentSize = CGSize(width: (view.frame.width / (CGFloat(settingView.subviews.count) + UI.leftRatio)) * CGFloat(settingView.subviews.count) + (UI.leftMargin * CGFloat(settingView.subviews.count)), height: settingView.bounds.height)
+        let buttonViews = [fontButton, addFontButton, bgColorButton, textColorButton, sizeButton, lineButton, letterButton]
+        let cnt = CGFloat(buttonViews.count)
+        settingView.addHorizentalSubviews(buttonViews, ratio: (cnt * UI.leftRatio), margin: UI.leftMargin)
+        settingView.contentSize = CGSize(width: (view.frame.width / (cnt + (cnt * UI.leftRatio))) * cnt + (UI.leftMargin * cnt), height: settingView.bounds.height)
         view.addSubview(settingView)
 
         settingView.snp.makeConstraints {
