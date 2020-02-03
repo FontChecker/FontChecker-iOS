@@ -29,7 +29,7 @@ public struct Constant {
             static let buttonWidth: CGFloat = 25
             static let height: CGFloat = buttonHeight + 50
             static let leftMargin: CGFloat = 15
-            static let leftRatio: CGFloat = -1
+            static let leftRatio: CGFloat = -0.3
             static let topMargin: CGFloat = 10
         }
         
