@@ -7,28 +7,85 @@
 //
 
 import XCTest
+import RxSwift
 @testable import FontChecker
 
 class FontCheckerTests: XCTestCase {
+    let disposeBag = DisposeBag()
+    var viewModel: MainViewModel!
+    var model: MainModel!
 
     override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        self.model = MainModel(downloader: DownloaderImpl(), fontManager: FontManagerImpl())
+        self.viewModel = MainViewModel(model: model)
     }
 
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    func testAddCustomFont() {
+        model.getDownloadFile(url: "http://pop.baemin.com/fonts/jua/BMJUA_otf.otf")
+            .subscribe(onNext: { result in
+                let url = try? result.get()
+                assert(url != nil, "Custom Font Download Getting Success")
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    func testChangeFont() {
+        viewModel.fontViewModel.fontData
+            .subscribe(onNext: { fontName in
+                assert(fontName == "BMJUA_otf", "Change Font Getting Success")
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.fontViewModel.fontData.accept("BMJUA_otf")
+    }
+    
+    func testTextColorChange() {
+        viewModel.textColorViewModel.colorData.startWith(UIColor.red)
+            .subscribe(onNext: { textColor in
+                assert(textColor == UIColor.red, "Change Text Color Getting Success")
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.textColorViewModel.colorData.accept(UIColor.red)
     }
 
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testBackgroundColorChange() {
+        viewModel.bgColorViewModel.colorData
+            .subscribe(onNext: { textColor in
+                assert(textColor == UIColor.blue, "Change Background Color Getting Success")
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.bgColorViewModel.colorData.accept(UIColor.blue)
     }
-
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    
+    func testTextSizeChange() {
+        viewModel.sizeViewModel.sizeData
+            .subscribe(onNext: { size in
+                assert(size == 15, "Change Text Size Getting Success")
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.sizeViewModel.sizeData.accept(15)
     }
-
+    
+    func testLinesSpaceChange() {
+        viewModel.lineViewModel.sizeData
+            .subscribe(onNext: { size in
+                assert(size == 10, "Change Line Size Getting Success")
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.lineViewModel.sizeData.accept(10)
+    }
+    
+    func testLetterSpaceChange() {
+        viewModel.letterViewModel.sizeData
+            .subscribe(onNext: { size in
+                assert(size == 8, "Change Letter Size Getting Success")
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.letterViewModel.sizeData.accept(8)
+    }
 }
